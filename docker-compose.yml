@@ -5,4 +5,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./render:/app/render
+      - ./src/raymath/lib:/app/src/raymath/lib
     command: ./main
