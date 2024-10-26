@@ -1,0 +1,8 @@
+services:
+  cpp_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./render:/app/render
+    command: ./main
