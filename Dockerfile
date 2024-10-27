@@ -21,7 +21,7 @@ RUN ar rcs ./src/lib/libraymath.a ./src/lib/raymath/*.o
 RUN ar rcs ./src/lib/librayimage.a ./src/lib/rayimage/*.o
 
 # Étape 2 : Compiler le projet principal en incluant la bibliothèque statique
-RUN g++ -o main ./src/*.cpp -I ./src/include -L ./src/lib -lraymath -llodepng -lrayimage
+RUN g++ -o main src/*.cpp -I src/include -L src/lib -lrayimage -lraymath -llodepng
 
 # Définir la commande par défaut pour lancer le programme
 CMD ["./main"]

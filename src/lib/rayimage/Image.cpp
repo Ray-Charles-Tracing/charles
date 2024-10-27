@@ -56,6 +56,6 @@ void Image::WriteFile(const char * filename) {
   //Encode the image
   unsigned error = lodepng::encode(filename, image, width, height);
 
-  // //if there's an error, display it
-  // if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+  //if there's an error, display it
+  if(error) std::cout << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
 }

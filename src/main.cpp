@@ -31,6 +31,6 @@ int main()
       }
     }
 
-    image.WriteFile("test.png");
+    image.WriteFile("./render/test.png");
 }
 
