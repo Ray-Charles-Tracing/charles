@@ -1,7 +1,7 @@
 #include <iostream>
 
 // Include our class definition - we can read it thanks to `target_include_directories`
-#include <Color.hpp>
+#include <raymath/Color.hpp>
 
 using namespace std;
 

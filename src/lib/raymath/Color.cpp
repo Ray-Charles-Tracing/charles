@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include "include/Color.hpp"
+#include "../../include/raymath/Color.hpp"
 
 Color:: Color() : r(0), b(0), g(0)
 {  
