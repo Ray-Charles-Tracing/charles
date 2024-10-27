@@ -5,5 +5,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./render:/app/render
-      - ./src/raymath/lib:/app/src/raymath/lib
+      - ./src:/app/src
     command: ./main
+    # command: tail -f /dev/null

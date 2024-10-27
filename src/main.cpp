@@ -2,8 +2,10 @@
 
 // Include our class definition - we can read it thanks to `target_include_directories`
 #include <raymath/Color.hpp>
+#include <rayimage/Image.hpp>
 
 using namespace std;
+
 
 int main()
 {    
@@ -11,13 +13,24 @@ int main()
     Color green(0, 1, 0);
     Color black;
 
-    // We can chain our color instances using << thanks to our operator !
     cout << "Red : " << red << std::endl;
     cout << "Green : " << green << std::endl;
     cout << "Black : " << black << std::endl;
 
-    // We can perform an addition + operation thanks to our operator !
     Color yellow = red + green;
 
-    cout << "Yellow : " << yellow << std::endl;    
+    cout << "Yellow : " << yellow << std::endl;
+
+    // Create an image in memory, and fill it with yellow
+    Image image(512, 512, yellow);
+
+    // Make a red square on the top left of the image
+    for (int y = 0; y < 100; y++) {
+      for (int x = 0; x < 100; x++) {
+        image.SetPixel(x, y, Color(1, 0, 0));
+      }
+    }
+
+    image.WriteFile("test.png");
 }
+
