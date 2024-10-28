@@ -6,6 +6,7 @@ class Sphere : public Shape {
   float radius;
 
  public:
+  Sphere(Vector position, float radius);
   Sphere(Vector position, float scale, float radius);
   ~Sphere() = default;
 

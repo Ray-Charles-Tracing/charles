@@ -7,10 +7,11 @@
 class Shape {
  protected:
   Vector position;
-  float scale;
+  float scale = 1;
 
  public:
   Shape(Vector position, float scale) : position(position), scale(scale) {}
+  Shape(Vector position) : position(position) {}
   virtual ~Shape() = default;
 
   Vector getPosition() const { return position; }
