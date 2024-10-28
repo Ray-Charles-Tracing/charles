@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../raymath/Vector.hpp"
+#include "Vector.hpp"
 
 class Shape {
  protected:

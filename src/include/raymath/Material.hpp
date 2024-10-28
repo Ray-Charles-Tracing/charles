@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "../raymath/Color.hpp"
-#include "../raymath/Vector.hpp"
+#include "Color.hpp"
 #include "ReflectionType.hpp"
+#include "Vector.hpp"
 
 class Material {
  protected:

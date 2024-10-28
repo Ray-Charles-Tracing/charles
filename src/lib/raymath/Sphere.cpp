@@ -1,10 +1,12 @@
 #include "Sphere.hpp"
 
-Sphere::Sphere(Vector position, float radius)
-    : Shape(position), radius(radius) {}
+Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
+               Color color)
+    : Shape(position), radius(radius), Material(reflectionType, color) {}
 
-Sphere::Sphere(Vector position, float scale, float radius)
-    : Shape(position), radius(radius) {}
+Sphere::Sphere(Vector position, float scale, float radius,
+               ReflectionType reflectionType, Color color)
+    : Shape(position, scale), radius(radius), Material(reflectionType, color) {}
 
 Vector Sphere::intersect(Vector ray) const {
   // Implémentation spécifique pour Sphere
@@ -12,7 +14,8 @@ Vector Sphere::intersect(Vector ray) const {
 }
 
 std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere) {
-  _stream << "Position: " << sphere.position << ", Scale: " << sphere.scale
-          << ", Radius: " << sphere.radius;
+  _stream << "Shape: " << static_cast<Shape const&>(sphere)
+          << ", Radius: " << sphere.radius
+          << "Material: " << static_cast<Material const&>(sphere);
   return _stream;
 }
