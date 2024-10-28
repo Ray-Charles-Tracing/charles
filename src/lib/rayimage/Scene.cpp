@@ -1,4 +1,4 @@
-#include "../../include/raymath/Scene.hpp"
+#include "../../include/rayimage/Scene.hpp"
 
 Scene::Scene(Vector origin, Camera camera, Color background)
     : origin(origin), camera(camera), background(background) {
@@ -12,9 +12,9 @@ Scene::~Scene() {
   return;
 }
 
-void Scene::AddShape(Shape shape) { this->shapes.push_back(shape); }
+// void Scene::AddShape(Shape shape) { this->shape.push_back(shape); }
 
-void Scene::AddLight(Light light) { this->lights.push_back(light); }
+// void Scene::AddLight(Light light) { this->light.push_back(light); }
 
 Vector Scene::GetOrigin() { return this->origin; }
 void Scene::SetOrigin(Vector origin) { this->origin = origin; }

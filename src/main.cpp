@@ -2,8 +2,11 @@
 
 // Include our class definition - we can read it thanks to
 // `target_include_directories`
+#include <rayimage/Camera.hpp>
 #include <rayimage/Image.hpp>
+#include <rayimage/Scene.hpp>
 #include <raymath/Color.hpp>
+#include <raymath/Vector.hpp>
 
 using namespace std;
 

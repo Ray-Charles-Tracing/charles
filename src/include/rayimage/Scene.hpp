@@ -4,19 +4,19 @@
 
 class Scene {
  private:
-  origin : Vector;
-  camera : Camera;
-  light : Light;
-  shapes : Shapes[];
-  background : Color;
+  Vector origin;
+  Camera camera;
+  // Light light;
+  // std::vector<Shape> shapes;
+  Color background;
 
  public:
   Scene(Vector origin, Camera camera, Color background);
   ~Scene();
 
-  void AddShape(Shape shape);
+  // void AddShape(Shape shape);
 
-  void AddLight(Light light);
+  // void AddLight(Light light);
 
   Vector GetOrigin();
   void SetOrigin(Vector origin);
@@ -26,4 +26,4 @@ class Scene {
 
   Color GetBackground();
   void SetBackground(Color background);
-}
+};
