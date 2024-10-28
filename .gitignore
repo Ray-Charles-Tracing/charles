@@ -8,4 +8,4 @@ render/
 # Compiled source
 *.DS_Store
 
-
+.vscode/*
