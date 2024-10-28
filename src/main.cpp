@@ -7,6 +7,8 @@
 #include <raymath/Light.hpp>
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
+#include <raymath/Shader.hpp>
+#include <raymath/ShaderFlat.hpp>
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
 #include <raymath/Vector.hpp>
@@ -47,10 +49,17 @@ int main() {
   image.WriteFile("./render/test.png");
 
   // ! This is sphere test
-  Sphere sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 1, 1));
+  Sphere sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 0.5, 1));
   cout << sphere << endl;
 
   Ray ray(Vector(0, 0, 0), Vector(1, 1, 1));
   cout << "Ray origin: " << ray.getOrigin() << std::endl;
   cout << "Ray direction: " << ray.getDirection() << std::endl;
+
+  // Create a Shader
+  ShaderFlat shaderFlat;
+  cout << shaderFlat.calculateShader(
+              Color(0, 0, 0), Ray(Vector(0, 0, 0), Vector(7, 8, 9)), sphere)
+       << endl;
+
 }
