@@ -7,13 +7,10 @@ Camera::Camera(Vector position, float fov, Image image)
 
 void Camera::Render(Image image) {
   std::cout << "Rendering image..." << std::endl;
-  image.WriteFile("./render/test.png");
+  image.WriteFile("./render/cameraRenderTest.png");
 }
 
-Camera::~Camera() {
-  std::cout << "Destroying camera..." << std::endl;
-  return;
-}
+Camera::~Camera() {}
 
 Image Camera::GetImage() { return this->image; }
 void Camera::SetImage(Image image) { this->image = image; }
