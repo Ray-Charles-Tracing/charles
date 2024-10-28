@@ -14,8 +14,10 @@ Vector Sphere::intersect(Vector const& ray) const {
 }
 
 std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere) {
-  _stream << "Shape: " << static_cast<Shape const&>(sphere)
-          << ", Radius: " << sphere.radius
-          << "Material: " << static_cast<Material const&>(sphere);
+  _stream << static_cast<Shape const&>(
+                 sphere)  // Appelle l'opérateur << de Shape
+          << ", Radius: " << sphere.radius << ", ReflectionType: "
+          << static_cast<int>(sphere.getReflectionType())
+          << ", Color: " << sphere.getColor();
   return _stream;
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 // Include our class definition - we can read it thanks to
 // `target_include_directories`
@@ -44,16 +45,31 @@ int main() {
       image.SetPixel(x, y, redLowIntensity);
     }
   }
-
   // Create a camera at the origin, looking at the center of the image
   Camera camera(Vector(0, 0, 0), 1.0, image);
-  Scene scene(Vector(0, 0, 0), camera, light, black);
+
+  // Create instances of Sphere and add them to a vector
+  // Using pointers to take advantage of polymorphism
+  std::vector<Shape*> shapes;
+  shapes.push_back(
+      new Sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 1, 1)));
+  shapes.push_back(
+      new Sphere(Vector(2, 2, 0), 1, ReflectionType::SPECULAR, Color(0, 1, 0)));
+
+  // Create a scene with the shapes
+  Scene scene(Vector(0, 0, 0), camera, light, black, shapes);
 
   camera.Render(image);
 
   image.WriteFile("./render/test.png");
 
-  // ! This is sphere test
-  Sphere sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 1, 1));
-  cout << sphere << endl;
+  // Test the shapes
+  for (Shape* shape : shapes) {
+    cout << *shape << endl;
+  }
+
+  // Free the dynamically allocated memory
+  for (Shape* shape : shapes) {
+    delete shape;
+  }
 }

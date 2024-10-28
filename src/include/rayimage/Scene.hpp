@@ -14,23 +14,22 @@ class Scene {
   Vector origin;
   Camera camera;
   Light light;
-  // std::vector<Shape> shapes;
+  std::vector<Shape*> shapes;  // Tableau de pointeurs vers Shape
   Color background;
 
  public:
   Scene(Vector const& origin, Camera const& camera, Light const& light,
-        Color const& background);
+        Color const& background, std::vector<Shape*> const& shapes);
   ~Scene();
-
-  // void AddShape(Shape shape);
-
-  // void AddLight(Light light);
 
   Vector GetOrigin() const;
   void SetOrigin(Vector const& origin);
 
   Camera GetCamera();
   void SetCamera(Camera camera);
+
+  Light GetLight() const;
+  void SetLight(Light const& light);
 
   Color GetBackground();
   void SetBackground(Color background);
