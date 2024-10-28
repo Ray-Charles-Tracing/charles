@@ -4,7 +4,6 @@
 
 #include "Color.hpp"
 #include "ReflectionType.hpp"
-#include "Vector.hpp"
 
 class Material {
  protected:

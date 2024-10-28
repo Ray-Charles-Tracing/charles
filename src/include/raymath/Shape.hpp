@@ -18,7 +18,7 @@ class Shape {
 
   float getScale() const { return scale; }
 
-  virtual Vector intersect(Vector ray) const = 0;
+  virtual Vector intersect(Vector const& ray) const = 0;
 
   friend std::ostream& operator<<(std::ostream& _stream, Shape const& shape) {
     _stream << "Position: " << shape.position << ", Scale: " << shape.scale;

@@ -1,4 +1,4 @@
-#include "Sphere.hpp"
+#include "../../include/raymath/Sphere.hpp"
 
 Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
                Color color)
@@ -8,7 +8,7 @@ Sphere::Sphere(Vector position, float scale, float radius,
                ReflectionType reflectionType, Color color)
     : Shape(position, scale), radius(radius), Material(reflectionType, color) {}
 
-Vector Sphere::intersect(Vector ray) const {
+Vector Sphere::intersect(Vector const& ray) const {
   // Implémentation spécifique pour Sphere
   return Vector();  // Remplacez par une implémentation réelle
 }

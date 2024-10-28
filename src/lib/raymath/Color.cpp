@@ -29,6 +29,23 @@ Color Color::operator+(Color const &col) {
 }
 
 /**
+ * Implementation of the * operator :
+ * Adjusting the intensity of a color by multiplying each component by the
+ * intensity factor.
+ *
+ * The intensity factor is a value between 0 and 1, representing the angle of
+ * the object relative to the light source. A value of 0 means no illumination,
+ * while a value of 1 means full illumination.
+ */
+Color Color::operator*(float intensity) const {
+  Color c;
+  c.r = fmax(fmin(r * intensity, 1), 0);
+  c.g = fmax(fmin(g * intensity, 1), 0);
+  c.b = fmax(fmin(b * intensity, 1), 0);
+  return c;
+}
+
+/**
  * Overriding the assignment operator
  */
 Color &Color::operator=(Color const &col) {
