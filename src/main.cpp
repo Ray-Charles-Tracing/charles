@@ -4,6 +4,8 @@
 // `target_include_directories`
 #include <rayimage/Image.hpp>
 #include <raymath/Color.hpp>
+#include <raymath/Light.hpp>
+#include <raymath/Vector.hpp>
 
 using namespace std;
 
@@ -25,7 +27,11 @@ int main() {
   // Create an image in memory, and fill it with yellow
   Image image(512, 512, yellow);
 
-  Color testColor = red * 0.5;
+  // Create a light source
+  Light light(Color(1, 1, 1),
+              Vector(256, 256, 0));  // White light at the center of the image
+
+  cout << "Light: " << light << std::endl;
 
   // Make a red square on the top left of the image
   for (int y = 0; y < 100; y++) {
