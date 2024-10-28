@@ -3,12 +3,11 @@
 Camera::Camera(Vector position, float fov, Image image)
     : position(position), fov(fov), image(image) {
   std::cout << "Creating camera..." << std::endl;
-  return;
 }
 
-void Camera::Render() {
+void Camera::Render(Image image) {
   std::cout << "Rendering image..." << std::endl;
-  return;
+  image.WriteFile("./render/test.png");
 }
 
 Camera::~Camera() {
@@ -27,3 +26,13 @@ void Camera::SetFov(float fov) { this->fov = fov; }
 
 // Shader Camera::GetShader() { return this->shader; }
 // void Camera::SetShader(Shader shader) { this->shader = shader; }
+
+std::ostream& operator<<(std::ostream& _stream, Camera const& camera) {
+  _stream << "Camera: {" << std::endl;
+  _stream << "  Position: " << camera.position << std::endl;
+  _stream << "  FOV: " << camera.fov << std::endl;
+  // _stream << "  Image: " << camera.image << std::endl;
+
+  _stream << "}";
+  return _stream;
+}

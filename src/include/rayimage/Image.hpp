@@ -20,6 +20,4 @@ class Image {
   Color GetPixel(unsigned int x, unsigned int y);
 
   void WriteFile(const char* filename);
-
-  void ConvertTo(string format);
 };

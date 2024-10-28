@@ -1,6 +1,11 @@
-#include "rayimage/Camera.hpp"
-#include "raymath/Color.hpp"
-#include "raymath/Vector.hpp"
+#pragma once
+
+#include <iostream>
+#include <vector>
+
+#include "../../include/rayimage/Camera.hpp"
+#include "../../include/raymath/Color.hpp"
+#include "../../include/raymath/Vector.hpp"
 
 class Scene {
  private:
@@ -11,19 +16,21 @@ class Scene {
   Color background;
 
  public:
-  Scene(Vector origin, Camera camera, Color background);
+  Scene(Vector const& origin, Camera const& camera, Color const& background);
   ~Scene();
 
   // void AddShape(Shape shape);
 
   // void AddLight(Light light);
 
-  Vector GetOrigin();
-  void SetOrigin(Vector origin);
+  Vector GetOrigin() const;
+  void SetOrigin(Vector const& origin);
 
   Camera GetCamera();
   void SetCamera(Camera camera);
 
   Color GetBackground();
   void SetBackground(Color background);
+
+  friend std::ostream& operator<<(std::ostream& _stream, Scene const& scene);
 };

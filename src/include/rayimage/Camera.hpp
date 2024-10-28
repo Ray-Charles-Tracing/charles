@@ -8,23 +8,28 @@
 class Camera {
  private:
   Vector position;
-  float fov;
+  float fov = 1.0;
   Image image;
-  // shader : Shader;
+  // Shader shader;
 
  public:
+  Camera();
   Camera(Vector position, float fov, Image image);
   ~Camera();
 
+  Vector GetPosition();
   void SetPosition(Vector position);
+
+  float GetFov();
   void SetFov(float fov);
+
+  Image GetImage();
   void SetImage(Image image);
+
+  // Shader GetShader();
   // void SetShader(Shader shader);
 
-  Vector GetPosition();
-  float GetFov();
-  Image GetImage();
-  // Shader GetShader();
+  void Render(Image image);
 
-  void Render();
+  friend std::ostream& operator<<(std::ostream& _stream, Camera const& camera);
 };
