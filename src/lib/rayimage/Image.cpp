@@ -61,3 +61,5 @@ void Image::WriteFile(const char* filename) {
     std::cout << "encoder error " << error << ": " << lodepng_error_text(error)
               << std::endl;
 }
+
+void Image::ConvertTo(std::string format) {}
