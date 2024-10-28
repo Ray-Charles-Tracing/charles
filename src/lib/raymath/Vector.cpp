@@ -4,17 +4,17 @@
 
 Vector::Vector() : x(0), y(0), z(0) {}
 
-Vector::Vector(int iX, int iY, int iZ) : x(iX), y(iY), z(iZ) {}
+Vector::Vector(float iX, float iY, float iZ) : x(iX), y(iY), z(iZ) {}
 
 Vector::~Vector() {}
 
-int Vector::getX() { return x; }
-int Vector::getY() { return y; }
-int Vector::getZ() { return z; }
+float Vector::getX() { return x; }
+float Vector::getY() { return y; }
+float Vector::getZ() { return z; }
 
-void Vector::setX(int iX) { x = iX; }
-void Vector::setY(int iY) { y = iY; }
-void Vector::setZ(int iZ) { z = iZ; }
+void Vector::setX(float iX) { x = iX; }
+void Vector::setY(float iY) { y = iY; }
+void Vector::setZ(float iZ) { z = iZ; }
 
 Vector Vector::operator+(Vector const &vect) {
   Vector v;
@@ -24,7 +24,7 @@ Vector Vector::operator+(Vector const &vect) {
   return v;
 }
 
-Vector Vector::compMult(Vector const &vect) {
+Vector Vector::operator*(Vector const &vect) {
   Vector result;
   result.x = x * vect.x;
   result.y = y * vect.y;
@@ -32,7 +32,7 @@ Vector Vector::compMult(Vector const &vect) {
   return result;
 }
 
-float Vector::operator*(Vector const &vect) {
+float Vector::computeScalable(Vector const &vect) {
   return ((x * vect.x) + (y * vect.y) + (z * vect.z));
 }
 
@@ -59,8 +59,7 @@ float Vector::getNorm() { return std::sqrt((x * x) + (y * y) + (z * z)); }
 
 Vector Vector::normalize() {
   Vector v;
-  float length;
-  length = Vector::getNorm();
+  float length = getNorm();
   if (length == 0) {
     return Vector(0, 0, 0);
   }
