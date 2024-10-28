@@ -4,26 +4,26 @@
 
 class Vector {
  private:
-  int x = 0;
-  int y = 0;
-  int z = 0;
+  float x = 0;
+  float y = 0;
+  float z = 0;
 
  public:
   Vector();
-  Vector(int x, int y, int z);
+  Vector(float x, float y, float z);
   ~Vector();
 
-  int getX();
-  int getY();
-  int getZ();
+  float getX();
+  float getY();
+  float getZ();
 
-  void setX(int x);
-  void setY(int y);
-  void setZ(int z);
+  void setX(float x);
+  void setY(float y);
+  void setZ(float z);
 
   Vector operator+(Vector const& vect);
   Vector operator*(Vector const& vect);
-  Vector operator*(float const& vect);
+  float computeScalable(Vector const& vect);
   Vector operator-(Vector const& vect);
   Vector operator=(Vector const& vect);
   friend std::ostream& operator<<(std::ostream& _stream, Vector const& vect);

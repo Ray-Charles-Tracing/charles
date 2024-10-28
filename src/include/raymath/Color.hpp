@@ -18,6 +18,7 @@ class Color {
   float B();
 
   Color operator+(Color const& col);
+  Color operator*(float intensity) const;
   Color& operator=(Color const& col);
   friend std::ostream& operator<<(std::ostream& _stream, Color const& col);
 };
