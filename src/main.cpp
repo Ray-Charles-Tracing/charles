@@ -47,7 +47,7 @@ int main() {
 
   // Create a camera at the origin, looking at the center of the image
   Camera camera(Vector(0, 0, 0), 1.0, image);
-  Scene scene(Vector(0, 0, 0), camera, black);
+  Scene scene(Vector(0, 0, 0), camera, light, black);
 
   camera.Render(image);
 

@@ -5,18 +5,21 @@
 
 #include "../../include/rayimage/Camera.hpp"
 #include "../../include/raymath/Color.hpp"
+#include "../../include/raymath/Light.hpp"
+#include "../../include/raymath/Shape.hpp"
 #include "../../include/raymath/Vector.hpp"
 
 class Scene {
  private:
   Vector origin;
   Camera camera;
-  // Light light;
+  Light light;
   // std::vector<Shape> shapes;
   Color background;
 
  public:
-  Scene(Vector const& origin, Camera const& camera, Color const& background);
+  Scene(Vector const& origin, Camera const& camera, Light const& light,
+        Color const& background);
   ~Scene();
 
   // void AddShape(Shape shape);

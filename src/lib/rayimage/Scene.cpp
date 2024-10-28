@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-Scene::Scene(Vector const& origin, Camera const& camera,
+Scene::Scene(Vector const& origin, Camera const& camera, Light const& light,
              Color const& background)
     : origin(origin), camera(camera), background(background) {}
 
@@ -11,10 +11,6 @@ Scene::~Scene() {
   std::cout << "Destroying scene..." << std::endl;
   return;
 }
-
-// void Scene::AddShape(Shape shape) { this->shape.push_back(shape); }
-
-// void Scene::AddLight(Light light) { this->light.push_back(light); }
 
 Vector Scene::GetOrigin() const { return this->origin; }
 void Scene::SetOrigin(Vector const& origin) { this->origin = origin; }
