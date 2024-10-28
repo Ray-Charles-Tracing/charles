@@ -1,5 +1,7 @@
 #include "../../include/raymath/Vector.hpp"
 
+#include <cmath>
+
 Vector::Vector() : x(0), y(0), z(0) {}
 
 Vector::Vector(int iX, int iY, int iZ) : x(iX), y(iY), z(iZ) {}
