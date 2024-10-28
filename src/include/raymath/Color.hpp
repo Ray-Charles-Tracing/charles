@@ -2,16 +2,16 @@
 
 #include <iostream>
 
-class  Color
-{
-private:
+class Color {
+ private:
   float r = 0;
   float b = 0;
   float g = 0;
-public:
+
+ public:
   Color();
   Color(float r, float g, float b);
-  ~ Color();
+  ~Color();
 
   float R();
   float G();
@@ -19,5 +19,5 @@ public:
 
   Color operator+(Color const& col);
   Color& operator=(Color const& col);
-  friend std::ostream & operator<<(std::ostream & _stream, Color const & col);
+  friend std::ostream& operator<<(std::ostream& _stream, Color const& col);
 };

@@ -1,0 +1,19 @@
+{
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  // Spécifier le style de formatage
+  "C_Cpp.clang_format_fallbackStyle": "Google", // ou "LLVM", "Mozilla", "WebKit", etc.
+  "C_Cpp.clang_format_style": "file", // Utiliser .clang-format si présent
+
+  // Autres configurations partagées
+  "editor.formatOnSave": true, // Formater automatiquement à l'enregistrement
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}

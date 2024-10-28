@@ -1,40 +1,26 @@
-#include <iostream>
-#include <cmath>
 #include "../../include/raymath/Color.hpp"
 
-Color:: Color() : r(0), b(0), g(0)
-{  
-}
+#include <cmath>
+#include <iostream>
 
-Color:: Color(float iR, float iG, float iB) : r(iR), g(iG), b(iB)
-{  
-}
+Color::Color() : r(0), b(0), g(0) {}
 
-Color::~ Color()
-{
-}
+Color::Color(float iR, float iG, float iB) : r(iR), g(iG), b(iB) {}
 
-float Color::R()
-{
-  return r;
-}
+Color::~Color() {}
 
-float Color::G()
-{
-  return g;
-}
+float Color::R() { return r; }
 
-float Color::B()
-{
-  return b;
-}
+float Color::G() { return g; }
+
+float Color::B() { return b; }
 
 /**
  * Implementation of the + operator :
  * Adding two colors is done by just adding the different components together :
  * (r1, g1, b1) + (r2, g2, b2) = (r1 + r2, g1 + g2, b1 + b2)
  */
-Color Color::operator+(Color const& col) {
+Color Color::operator+(Color const &col) {
   Color c;
   c.r = fmax(fmin(r + col.r, 1), 0);
   c.g = fmax(fmin(g + col.g, 1), 0);
@@ -45,7 +31,7 @@ Color Color::operator+(Color const& col) {
 /**
  * Overriding the assignment operator
  */
-Color& Color::operator=(Color const& col) {
+Color &Color::operator=(Color const &col) {
   r = col.r;
   g = col.g;
   b = col.b;
@@ -54,8 +40,9 @@ Color& Color::operator=(Color const& col) {
 
 /**
  * Here we implement the << operator :
- * We take each component and append it to he stream, giving it a nice form on the console
+ * We take each component and append it to he stream, giving it a nice form on
+ * the console
  */
-std::ostream & operator<<(std::ostream & _stream, Color const & col) {  
+std::ostream &operator<<(std::ostream &_stream, Color const &col) {
   return _stream << "(" << col.r << "," << col.g << "," << col.b << ")";
 }
