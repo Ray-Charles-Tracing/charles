@@ -7,10 +7,10 @@
 
 class Camera {
  private:
-  position : Vector;
-  fov : float;
-  image : Image;
-  // shader: Shader;
+  Vector position;
+  float fov;
+  Image image;
+  // shader : Shader;
 
  public:
   Camera(Vector position, float fov, Image image);
