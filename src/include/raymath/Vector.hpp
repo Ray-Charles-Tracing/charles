@@ -22,8 +22,8 @@ class Vector {
   void setZ(int z);
 
   Vector operator+(Vector const& vect);
-  Vector operator*(Vector const& vect);
-  Vector operator*(float const& vect);
+  Vector compMult(Vector const& vect);
+  float operator*(Vector const& vect);
   Vector operator-(Vector const& vect);
   Vector operator=(Vector const& vect);
   friend std::ostream& operator<<(std::ostream& _stream, Vector const& vect);
