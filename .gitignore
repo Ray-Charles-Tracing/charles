@@ -5,4 +5,7 @@ render/
 *.O
 *.a
 
+# Compiled source
+*.DS_Store
+
 
