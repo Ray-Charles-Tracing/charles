@@ -5,6 +5,9 @@
 #include <rayimage/Image.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
+#include <raymath/ReflectionType.hpp>
+#include <raymath/Shape.hpp>
+#include <raymath/Sphere.hpp>
 #include <raymath/Vector.hpp>
 
 using namespace std;
@@ -41,4 +44,8 @@ int main() {
   }
 
   image.WriteFile("./render/test.png");
+
+  // ! This is sphere test
+  Sphere sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 1, 1));
+  cout << sphere << endl;
 }
