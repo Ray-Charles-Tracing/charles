@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "Color.hpp"
 #include "Ray.hpp"
 #include "Shader.hpp"
@@ -7,5 +9,6 @@
 
 class ShaderFlat : public Shader {
  public:
-  Color calculateShader(Color pixel, Ray ray, Sphere sphere) const override;
+  Color calculateShader(Color pixel, std::optional<Vector> intersectionPoint,
+                        Ray ray, Sphere sphere) const override;
 };

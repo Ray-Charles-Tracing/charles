@@ -1,10 +1,11 @@
 #include "../../include/raymath/ShaderFlat.hpp"
 
-Color ShaderFlat::calculateShader(Color pixel, Ray ray, Sphere sphere) const {
-  Vector P(6, 7, 8);
-  /*   if (P) {
-      return pixel;
-    } */
-  Color newPixel = pixel;
-  return pixel + sphere.getColor();
+Color ShaderFlat::calculateShader(Color pixel,
+                                  std::optional<Vector> intersectionPoint,
+                                  Ray ray, Sphere sphere) const {
+  if (intersectionPoint.has_value()) {
+    Color newPixel = pixel;
+    return pixel + sphere.getColor();
+  }
+  return pixel;
 }

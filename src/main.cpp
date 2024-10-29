@@ -32,7 +32,7 @@ int main() {
   cout << "Yellow : " << yellow << std::endl;
 
   // Create an image in memory, and fill it with yellow
-  Image image(512, 512, yellow);
+  Image image(512, 512);
 
   // Create a light source
   Light light(Color(1, 1, 1),
@@ -40,36 +40,47 @@ int main() {
 
   cout << "Light: " << light << std::endl;
 
+  // ! This is sphere test
+  Sphere sphere(Vector(0, 0, 15), 3, ReflectionType::MAT, Color(1, 1, 1));
+  cout << sphere << endl;
+
+  // ! This is Shader Flat test
+  ShaderFlat shaderFlat;
+
   // Make a red square on the top left of the image
-  for (int y = 0; y < 100; y++) {
-    for (int x = 0; x < 100; x++) {
-      image.SetPixel(x, y, redLowIntensity);
+  for (int y = 0; y < 512; y++) {
+    for (int x = 0; x < 512; x++) {
+      float coordonateX = (x - 256) / 256.0;
+      float coordonateY = (y - 256) / 256.0;
+      // ! This is Ray test
+      Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
+      std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+      Color pixelColor =
+          shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
+                                     sphere);  // ! This is Shader test
+      image.SetPixel(x, y, pixelColor);
     }
   }
 
   image.WriteFile("./render/test.png");
 
-  // ! This is sphere test
-  Sphere sphere(Vector(0, 0, 10), 3, ReflectionType::MAT, Color(0, 0, 1));
-  cout << sphere << endl;
-
   // ! This is Ray test
-  Ray ray(Vector(0, 0, 0), Vector(0, 0, 1));
-  cout << "Ray origin: " << ray.getOrigin() << std::endl;
-  cout << "Ray direction: " << ray.getDirection() << std::endl;
+  // Ray ray(Vector(0, 0, 0), Vector(0, 0, 1));
+  // cout << "Ray origin: " << ray.getOrigin() << std::endl;
+  // cout << "Ray direction: " << ray.getDirection() << std::endl;
 
   // ! This is Intersect test
-  std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
-  if (intersectPointOpt.has_value()) {
-    Vector intersectPoint = intersectPointOpt.value();
-    cout << "Intersect point: " << intersectPoint << std::endl;
-  } else {
-    cout << "No intersection point found." << std::endl;
-  }
+  // std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+  // if (intersectPointOpt.has_value()) {
+  //   Vector intersectPoint = intersectPointOpt.value();
+  //   cout << "Intersect point: " << intersectPoint << std::endl;
+  // } else {
+  //   cout << "No intersection point found." << std::endl;
+  // }
 
-  // Create a Shader
-  ShaderFlat shaderFlat;
-  cout << shaderFlat.calculateShader(
-              Color(0, 0, 0), Ray(Vector(0, 0, 0), Vector(7, 8, 9)), sphere)
-       << endl;
+  // // Create a Shader
+  // ShaderFlat shaderFlat;
+  // cout << shaderFlat.calculateShader(
+  //             Color(0, 0, 0), Ray(Vector(0, 0, 0), Vector(7, 8, 9)), sphere)
+  //      << endl;
 }
