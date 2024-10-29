@@ -65,7 +65,7 @@ int main() {
   Camera camera(Vector(0, 0, 0), 1.0, image);
   camera.Render(image);
 
-  Scene scene(Vector(0, 0, 0), camera, black);
+  Scene scene(Vector(0, 0, 0), camera, light, black, shapes);
 
   image.WriteFile("./render/test.png");
 
