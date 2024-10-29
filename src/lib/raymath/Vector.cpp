@@ -32,6 +32,14 @@ Vector Vector::operator*(Vector const &vect) {
   return result;
 }
 
+Vector Vector::operator*(float const &direction) {
+  Vector result;
+  result.x = x * direction;
+  result.y = y * direction;
+  result.z = z * direction;
+  return result;
+}
+
 float Vector::computeScalable(Vector const &vect) {
   return ((x * vect.x) + (y * vect.y) + (z * vect.z));
 }

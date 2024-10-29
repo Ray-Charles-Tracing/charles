@@ -20,8 +20,8 @@ class Material {
 
   friend std::ostream& operator<<(std::ostream& _stream,
                                   Material const& material) {
-    _stream << ", ReflectionType: " << static_cast<int>(material.reflectionType)
-            << ", Color: " << material.color;
+    _stream << "(ReflectionType: " << static_cast<int>(material.reflectionType)
+            << ", Color: " << material.color << ")";
     return _stream;
   }
 };

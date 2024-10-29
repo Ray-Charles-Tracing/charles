@@ -23,6 +23,7 @@ class Vector {
 
   Vector operator+(Vector const& vect);
   Vector operator*(Vector const& vect);
+  Vector operator*(float const& direction);
   float computeScalable(Vector const& vect);
   Vector operator-(Vector const& vect);
   Vector operator=(Vector const& vect);

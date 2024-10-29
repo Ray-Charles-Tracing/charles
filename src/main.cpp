@@ -1,4 +1,5 @@
 #include <iostream>
+#include <optional>
 
 // Include our class definition - we can read it thanks to
 // `target_include_directories`
@@ -49,17 +50,26 @@ int main() {
   image.WriteFile("./render/test.png");
 
   // ! This is sphere test
-  Sphere sphere(Vector(0, 0, 0), 1, ReflectionType::DIFFUSE, Color(1, 0.5, 1));
+  Sphere sphere(Vector(0, 0, 10), 3, ReflectionType::MAT, Color(0, 0, 1));
   cout << sphere << endl;
 
-  Ray ray(Vector(0, 0, 0), Vector(1, 1, 1));
+  // ! This is Ray test
+  Ray ray(Vector(0, 0, 0), Vector(0, 0, 1));
   cout << "Ray origin: " << ray.getOrigin() << std::endl;
   cout << "Ray direction: " << ray.getDirection() << std::endl;
+
+  // ! This is Intersect test
+  std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+  if (intersectPointOpt.has_value()) {
+    Vector intersectPoint = intersectPointOpt.value();
+    cout << "Intersect point: " << intersectPoint << std::endl;
+  } else {
+    cout << "No intersection point found." << std::endl;
+  }
 
   // Create a Shader
   ShaderFlat shaderFlat;
   cout << shaderFlat.calculateShader(
               Color(0, 0, 0), Ray(Vector(0, 0, 0), Vector(7, 8, 9)), sphere)
        << endl;
-
 }
