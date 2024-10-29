@@ -1,7 +1,9 @@
 #include "../../include/raymath/Ray.hpp"
 
 Ray::Ray(Vector iVectorOrigin, Vector iVectorDirection)
-    : origin(iVectorOrigin), direction(iVectorDirection) {}
+    : origin(iVectorOrigin) {
+  direction = iVectorDirection.normalize();
+}
 
 Ray::~Ray() {}
 

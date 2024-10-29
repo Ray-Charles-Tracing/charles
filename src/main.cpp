@@ -1,22 +1,24 @@
+#include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <rayimage/Camera.hpp>
+#include <rayimage/Image.hpp>
+#include <rayimage/Scene.hpp>
+#include <raymath/Color.hpp>
+#include <raymath/Light.hpp>
+#include <raymath/Ray.hpp>
+#include <raymath/ReflectionType.hpp>
+#include <raymath/Shader.hpp>
+#include <raymath/ShaderDiffus.hpp>
+#include <raymath/ShaderFlat.hpp>
+#include <raymath/ShaderPecular.hpp>
+#include <raymath/ShaderPhong.hpp>
+#include <raymath/Shape.hpp>
+#include <raymath/Sphere.hpp>
+#include <raymath/Vector.hpp>
 #include <vector>
-
-// Include our class definition - we can read it thanks to
-// `target_include_directories`
-#include "rayimage/Camera.hpp"
-#include "rayimage/Image.hpp"
-#include "rayimage/Scene.hpp"
-#include "raymath/Color.hpp"
-#include "raymath/Light.hpp"
-#include "raymath/Ray.hpp"
-#include "raymath/ReflectionType.hpp"
-#include "raymath/ShaderFlat.hpp"
-#include "raymath/Shape.hpp"
-#include "raymath/Sphere.hpp"
-#include "raymath/Vector.hpp"
 
 using namespace std;
 
@@ -28,29 +30,33 @@ int main() {
   Color red(1, 0, 0);
   Color black;
 
-  // Initialize the image
+  // Create an image in memory
   int width = 1920;
   int height = 1920;
   Image image(width, height);
 
-  // Initialize the light
-  Light light(Color(1, 1, 1), Vector(256, 256, 0));
+  // Create light sources
+  vector<Light> lights = {
+      Light(Color(0, 1, 1), Vector(128, 128, 128)),
+      Light(Color(1, 1, 0), Vector(-128, -128, 128)),
+      Light(Color(1, 0, 1), Vector(-128, 128, 128)),
+      // Light(Color(1, 1, 1), Vector(0, 45, 0))
+  };
 
-  // Initialize the shader
-  ShaderFlat shaderFlat;
+  // List of spheres
+  vector<Sphere> spheres = {
+      Sphere(Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)),
+      Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
+      Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
+
+  ShaderPhong shaderPhong;
 
   // Initialize the camera
-  Camera camera(Vector(0, 0, 0), 1.0, image, shaderFlat);
-
-  // Initialize shapes
-  // Using std::unique_ptr to manage the memory of shapes automatically
-  // This ensures that the shapes are properly deleted when they go out of scope
-  std::vector<std::unique_ptr<Shape>> shapes;
-  shapes.push_back(std::make_unique<Sphere>(
-      Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
+  Camera camera(Vector(0, 0, 0), 1.0, image, shaderPhong);
 
   // Initialize the scene
-  Scene scene(Vector(0, 0, 0), camera, light, black, std::move(shapes));
+  Scene scene(Vector(0, 0, 0), camera, std::move(lights), black,
+              std::move(spheres));
 
   // Execute raycasting and render the image
   Image renderImage = scene.rayCast();

@@ -60,9 +60,6 @@ float Vector::getNorm() { return std::sqrt((x * x) + (y * y) + (z * z)); }
 Vector Vector::normalize() {
   Vector v;
   float length = getNorm();
-  if (length == 0) {
-    return Vector(0, 0, 0);
-  }
   v.x = x / length;
   v.y = y / length;
   v.z = z / length;

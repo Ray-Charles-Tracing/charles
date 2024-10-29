@@ -45,6 +45,21 @@ Color Color::operator*(float intensity) const {
   return c;
 }
 
+Color Color::operator*(Color const &col) const {
+  Color c;
+  c.r = fmax(fmin(r * col.r, 1), 0);
+  c.g = fmax(fmin(g * col.g, 1), 0);
+  c.b = fmax(fmin(b * col.b, 1), 0);
+  return c;
+}
+
+Color &Color::operator+=(Color const &col) {
+  r = fmax(fmin(r + col.r, 1), 0);
+  g = fmax(fmin(g + col.g, 1), 0);
+  b = fmax(fmin(b + col.b, 1), 0);
+  return *this;
+}
+
 /**
  * Overriding the assignment operator
  */

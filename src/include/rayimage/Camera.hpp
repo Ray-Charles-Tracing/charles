@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "../../include/rayimage/Image.hpp"
-#include "../../include/raymath/ShaderFlat.hpp"  // Shader importé
+#include "../../include/raymath/ShaderPhong.hpp"
 #include "../../include/raymath/Vector.hpp"
 
 class Camera {
@@ -11,10 +11,10 @@ class Camera {
   Vector position;
   float fov;
   Image image;
-  ShaderFlat shader;
+  ShaderPhong shader;
 
  public:
-  Camera(Vector position, float fov, Image image, ShaderFlat shader);
+  Camera(Vector position, float fov, Image image, ShaderPhong shader);
   ~Camera();
 
   Vector GetPosition() const;
@@ -26,8 +26,8 @@ class Camera {
   Image& GetImage();
   void SetImage(Image image);
 
-  ShaderFlat GetShader() const;
-  void SetShader(ShaderFlat shader);
+  ShaderPhong GetShader() const;
+  void SetShader(ShaderPhong shader);
 
   void Render(Image renderImage);
 

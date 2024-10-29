@@ -5,8 +5,8 @@
 class Color {
  private:
   float r = 0;
-  float b = 0;
   float g = 0;
+  float b = 0;
 
  public:
   Color();
@@ -19,6 +19,8 @@ class Color {
 
   Color operator+(Color const& col);
   Color operator*(float intensity) const;
+  Color operator*(Color const& col) const;
   Color& operator=(Color const& col);
+  Color& operator+=(Color const& col);
   friend std::ostream& operator<<(std::ostream& _stream, Color const& col);
 };
