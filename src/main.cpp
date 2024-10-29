@@ -1,8 +1,9 @@
+#include <cmath>
 #include <iostream>
 #include <optional>
+#include <vector>
 
-// Include our class definition - we can read it thanks to
-// `target_include_directories`
+// Inclusion de nos définitions de classe
 #include <rayimage/Image.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
@@ -11,6 +12,8 @@
 #include <raymath/Shader.hpp>
 #include <raymath/ShaderDiffus.hpp>
 #include <raymath/ShaderFlat.hpp>
+#include <raymath/ShaderPecular.hpp>
+#include <raymath/ShaderPhong.hpp>
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
 #include <raymath/Vector.hpp>
@@ -19,89 +22,80 @@ using namespace std;
 
 int main() {
   Color red(1, 0, 0);
-  Color redLowIntensity = red * 0.24;
   Color green(0, 1, 0);
   Color black;
 
-  cout << "Red : " << red << std::endl;
-  cout << "Red low intensity : " << redLowIntensity << std::endl;
-  cout << "Green : " << green << std::endl;
-  cout << "Black : " << black << std::endl;
-
-  Color yellow = red + green;
-
-  cout << "Yellow : " << yellow << std::endl;
-
-  // Create an image in memory, and fill it with yellow
+  // Création d'une image en mémoire
   int width = 1920;
   int height = 1920;
   Image image(width, height);
 
-  // Create a light source
-  Light light(Color(1, 1, 1),
-              Vector(256, 256, 0));  // White light at the center of the image
+  // Création des sources de lumière
+  vector<Light> lights = {Light(Color(0, 1, 1), Vector(128, 128, 128)),
+                          Light(Color(1, 1, 0), Vector(-128, -128, 128)),
+                          Light(Color(1, 0, 1), Vector(-128, 128, 128))/* , 
+                          Light(Color(1, 1, 1), Vector(0, 45, 0)) */};
 
-  cout << "Light: " << light << std::endl;
+  // Liste des sphères
+  vector<Sphere> spheres = {
+      Sphere(Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)),
+      Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
+      Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
 
-  // ! This is sphere test
-  Sphere sphere(Vector(-15, -15, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
-  cout << sphere << endl;
-
-  // ! This is Shader Flat test
-  ShaderFlat shaderFlat;
-
-
-  // ! This is Shader Diffus test
-  ShaderDiffus shaderDiffus;
+  ShaderPhong shaderPhong;
 
   // Calculate aspect ratio
   float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
-
   // Make a red square on the top left of the image
-  float coordonateY = 1.0;
+  /*   float coordonateY = 1.0;
+   */
+  // Remplissage de l'image
   for (int y = 0; y < height; y++) {
-    float coordonateX = -1.0 * aspectRatio;
+    /*     float coordonateX = -1.0 * aspectRatio;
+     */
     for (int x = 0; x < width; x++) {
-      // float widthByTwo = width / 2;
-      // float heightByTwo = height / 2;
-      // float coordonateX = (x - widthByTwo) / widthByTwo * aspectRatio;
-      // float coordonateY = (height - y - 1 - heightByTwo) / heightByTwo;
-
-      // ! This is Ray test
+      float coordonateX = (x - width / 2.0f) / (width / 2.0f);
+      float coordonateY = (y - height / 2.0f) / (height / 2.0f);
       Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
-      // cout << "Ray direction: " << ray.getDirection() << std::endl;
-      std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
-      Color pixelColor =
-          shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray, sphere, light);  // ! This is Shader test
-      Color pixelColorDiffus = shaderDiffus.calculateShader(Color(0, 0, 0), intersectPointOpt, ray, sphere, light);  // ! This is Shader test
-      image.SetPixel(x, y, pixelColorDiffus);
 
-      coordonateX += 2.0 * aspectRatio / width;
+      float closestDistance = numeric_limits<float>::max();
+      Color pixelColorPhong;
+      optional<Vector> closestIntersectPoint;
+      Sphere* closestSphere = nullptr;
 
-    }
-    coordonateY -= 2.0 / height;
+      for (auto& sphere : spheres) {  // Trier spheres par ordre de profondeur,
+                                      // la plus proche en premier
+        optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+        float distance = intersectPointOpt.has_value()
+                             ? (ray.getOrigin() - *intersectPointOpt).getNorm()
+                             : numeric_limits<float>::max();
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIntersectPoint = intersectPointOpt;
+          closestSphere = &sphere;
+        }
+      }
+
+      if (closestSphere) {
+        for (const auto& light : lights) {
+          if (closestIntersectPoint.has_value()) {
+            pixelColorPhong += shaderPhong.calculateShader(
+                Color(0, 0, 0), closestIntersectPoint, ray, *closestSphere,
+                light);
+          }
+        }
+      }
+
+      // Définir la couleur du pixel
+      image.SetPixel(x, y, pixelColorPhong);
+
+/*       coordonateX += 2.0 * aspectRatio / width;
+ */    }
+/*  coordonateY -= 2.0 / height; */
   }
 
+  // Écriture de l'image dans un fichier
   image.WriteFile("./render/test.png");
-
-  // ! This is Ray test
-  // Ray ray(Vector(0, 0, 0), Vector(0, 0, 1));
-  // cout << "Ray origin: " << ray.getOrigin() << std::endl;
-  // cout << "Ray direction: " << ray.getDirection() << std::endl;
-
-  // ! This is Intersect test
-  // std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
-  // if (intersectPointOpt.has_value()) {
-  //   Vector intersectPoint = intersectPointOpt.value();
-  //   cout << "Intersect point: " << intersectPoint << std::endl;
-  // } else {
-  //   cout << "No intersection point found." << std::endl;
-  // }
-
-  // // Create a Shader
-  // ShaderFlat shaderFlat;
-  // cout << shaderFlat.calculateShader(
-  //             Color(0, 0, 0), Ray(Vector(0, 0, 0), Vector(7, 8, 9)), sphere)
-  //      << endl;
 }
