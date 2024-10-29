@@ -6,11 +6,11 @@
 
 Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
                Color color)
-    : Shape(position), radius(radius), Material(reflectionType, color) {}
+    : Shape(position, color, reflectionType), radius(radius) {}
 
 Sphere::Sphere(Vector position, float scale, float radius,
                ReflectionType reflectionType, Color color)
-    : Shape(position, scale), radius(radius), Material(reflectionType, color) {}
+    : Shape(position, scale, color, reflectionType), radius(radius) {}
 
 std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
   // Calculate direction vector between camera origin and sphere center
@@ -97,7 +97,6 @@ bool Sphere::isIntersect(float centerToTheoricIntersectPointLength) const {
 
 std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere) {
   _stream << "Shape: " << static_cast<Shape const&>(sphere)
-          << ", Radius: " << sphere.radius
-          << ", Material: " << static_cast<Material const&>(sphere);
+          << ", Radius: " << sphere.radius;
   return _stream;
 }

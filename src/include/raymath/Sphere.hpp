@@ -4,17 +4,16 @@
 #include <optional>
 
 #include "Color.hpp"
-#include "Material.hpp"
 #include "Ray.hpp"
 #include "ReflectionType.hpp"
 #include "Shape.hpp"
 #include "Vector.hpp"
 
-class Sphere : public Shape, public Material {
+class Sphere : public Shape {
  private:
   float radius;
   bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
-  bool isIntersect(float centerToTheoricIntersectPointLength) const override;
+  bool isIntersect(float centerToTheoricIntersectPointLength) const;
 
  public:
   Sphere(Vector position, float radius, ReflectionType reflectionType,
