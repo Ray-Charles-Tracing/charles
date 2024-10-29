@@ -18,16 +18,19 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
 
   // Verify if sphere is visible from camera
   if (isVisible(ray, cameraSphereDirection) == false) {
-    std::cout << "Not visible" << std::endl;
+    // std::cout << "Not visible" << std::endl;
     return std::nullopt;
   }
 
-  // Calculate scalar product between direction vector and ray vector
+  // Calculate projection of direction vector on ray direction vector
+  float scalarProductOfCameraSphereDirectionToRay =
+      cameraSphereDirection.computeScalable(ray.getDirection().normalize());
   Vector cameraSphereDirectionProjection =
-      cameraSphereDirection * ray.getDirection().normalize();
+      ray.getDirection().normalize() *
+      scalarProductOfCameraSphereDirectionToRay;
 
-  // Calulate theoric intersect pointCalcule la position du point d'intersection
-  // théorique
+  // Calulate theoric intersect pointCalcule la position du point
+  // d'intersection théorique
   Vector theoricIntersectPoint =
       ray.getOrigin() + cameraSphereDirectionProjection;
 
@@ -39,7 +42,7 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
 
   // Verify intersection
   if (isIntersect(centerToTheoricIntersectPointLength) == false) {
-    std::cout << "Not intersect" << std::endl;
+    // std::cout << "Not intersect" << std::endl;
     return std::nullopt;
   }
 
@@ -66,15 +69,16 @@ bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {
   // Calculate length of the direction vector
   float cameraSphereDirectionNorm = cameraSphereDirection.getNorm();
   // Normalise direction vector
+  // ! Verifier normalize
   Vector cameraSphereDirectionNormalized = cameraSphereDirection.normalize();
   // Calculate scalar product between normalised direction vector and
   // normalised ray vector
   float scalarProduct = cameraSphereDirectionNormalized.computeScalable(
       ray.getDirection().normalize());
 
-  std::cout << "Norme" << cameraSphereDirectionNorm << "Direction nomalisé"
-            << cameraSphereDirection << "Produit scalaire" << scalarProduct
-            << std::endl;
+  // std::cout << "Norme" << cameraSphereDirectionNorm << "Direction nomalisé"
+  //           << cameraSphereDirection << "Produit scalaire" << scalarProduct
+  //           << std::endl;
   // If scalar product is greater than 0, sphere is visible
   if (scalarProduct > 0) {
     return true;
@@ -83,8 +87,9 @@ bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {
 }
 
 bool Sphere::isIntersect(float centerToTheoricIntersectPointLength) const {
-  std::cout << "Distance CP" << centerToTheoricIntersectPointLength << "Rayon"
-            << radius << std::endl;
+  // std::cout << "Distance CP" << centerToTheoricIntersectPointLength <<
+  // "Rayon"
+  //           << radius << std::endl;
   if (centerToTheoricIntersectPointLength < radius) {
     return true;
   }

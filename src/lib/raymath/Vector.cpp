@@ -24,14 +24,6 @@ Vector Vector::operator+(Vector const &vect) {
   return v;
 }
 
-Vector Vector::operator*(Vector const &vect) {
-  Vector result;
-  result.x = x * vect.x;
-  result.y = y * vect.y;
-  result.z = z * vect.z;
-  return result;
-}
-
 Vector Vector::operator*(float const &direction) {
   Vector result;
   result.x = x * direction;
