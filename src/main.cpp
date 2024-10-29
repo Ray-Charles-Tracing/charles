@@ -7,6 +7,7 @@
 #include <rayimage/Image.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
+#include <raymath/Plan.hpp>
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
 #include <raymath/Shader.hpp>
@@ -41,6 +42,9 @@ int main() {
       Sphere(Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)),
       Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
       Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
+
+  // Plan plan(Vector(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0,
+  // 1));
 
   ShaderPhong shaderPhong;
 
