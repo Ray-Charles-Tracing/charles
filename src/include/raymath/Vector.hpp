@@ -13,21 +13,21 @@ class Vector {
   Vector(float x, float y, float z);
   ~Vector();
 
-  float getX();
-  float getY();
-  float getZ();
+  float getX() const;
+  float getY() const;
+  float getZ() const;
 
   void setX(float x);
   void setY(float y);
   void setZ(float z);
 
-  Vector operator+(Vector const& vect);
-  Vector operator*(float const& direction);
-  float computeScalable(Vector const& vect);
-  Vector operator-(Vector const& vect);
-  Vector operator=(Vector const& vect);
+  Vector operator+(Vector const& vect) const;
+  Vector operator*(float const& direction) const;
+  float computeScalable(Vector const& vect) const;
+  Vector operator-(Vector const& vect) const;
+  Vector& operator=(Vector const& vect);
   friend std::ostream& operator<<(std::ostream& _stream, Vector const& vect);
 
-  float getNorm();
-  Vector normalize();
+  float getNorm() const;
+  Vector normalize() const;
 };

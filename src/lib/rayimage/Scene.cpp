@@ -32,7 +32,7 @@ void Scene::SetLights(std::vector<Light> lights) {
 Color Scene::GetBackground() const { return background; }
 void Scene::SetBackground(Color background) { this->background = background; }
 
-Image Scene::rayCast() {
+Image Scene::rayCast(int maxReflections) {
   std::cout << "Executing ray casting..." << std::endl;
 
   // Access class members directly to avoid repetitive method calls
@@ -58,37 +58,7 @@ Image Scene::rayCast() {
       float coordonateY = 1.0 - y * coordonateYIncrement;
 
       Ray ray(cameraPosition, Vector(coordonateX, coordonateY, 1));
-      Color pixelColor = background;
-
-      float closestDistance = std::numeric_limits<float>::max();
-      std::optional<Vector> closestIntersectPoint;
-      Sphere* closestSphere = nullptr;
-
-      for (auto& sphere : spheres) {
-        // `std::optional` is used to represent optional values that may or may
-        // not be present. It is used here to handle the case where there is no
-        // intersection point.
-        std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
-        float distance = intersectPointOpt.has_value()
-                             ? (ray.getOrigin() - *intersectPointOpt).getNorm()
-                             : std::numeric_limits<float>::max();
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIntersectPoint = intersectPointOpt;
-          closestSphere = &sphere;  // Get the raw pointer from the unique_ptr
-        }
-      }
-
-      if (closestSphere) {
-        // Ensure the closestSphere is of type Sphere before casting
-        if (closestIntersectPoint.has_value()) {
-          for (const auto& light : lights) {
-            pixelColor += shader->calculateShader(
-                pixelColor, closestIntersectPoint, ray, *closestSphere, light);
-          }
-        }
-      }
+      Color pixelColor = traceRay(ray, maxReflections);
 
       image.SetPixel(x, y, pixelColor);
     }
@@ -96,6 +66,58 @@ Image Scene::rayCast() {
 
   std::cout << "Ray casting completed." << std::endl;
   return image;
+}
+
+Color Scene::traceRay(const Ray& ray, int depth) {
+  if (depth <= 0) {
+    return background;
+  }
+
+  float closestDistance = std::numeric_limits<float>::max();
+  std::optional<Vector> closestIntersectPoint;
+  Sphere* closestSphere = nullptr;
+
+  for (auto& sphere : spheres) {
+    // `std::optional` is used to represent optional values that may or may
+    // not be present. It is used here to handle the case where there is no
+    // intersection point.
+    std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+    float distance = intersectPointOpt.has_value()
+                         ? (ray.getOrigin() - *intersectPointOpt).getNorm()
+                         : std::numeric_limits<float>::max();
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestIntersectPoint = intersectPointOpt;
+      closestSphere = &sphere;  // Get the raw pointer from the unique_ptr
+    }
+  }
+
+  if (closestSphere && closestIntersectPoint.has_value()) {
+    Color pixelColor = background;
+    for (const auto& light : lights) {
+      pixelColor += camera.GetShader()->calculateShader(
+          pixelColor, closestIntersectPoint, ray, *closestSphere, light);
+    }
+
+    // Handle reflection
+    if (closestSphere->getReflectionType() == ReflectionType::REFLECTIVE) {
+      Vector intersectionPoint = *closestIntersectPoint;
+      Vector normal =
+          (intersectionPoint - closestSphere->getPosition()).normalize();
+      Vector reflectionDirection =
+          ray.getDirection() -
+          normal * 2 * ray.getDirection().computeScalable(normal);
+      Ray reflectionRay(intersectionPoint, reflectionDirection);
+
+      Color reflectionColor = traceRay(reflectionRay, depth - 1);
+      pixelColor += reflectionColor * 0.5;  // Adjust reflection intensity
+    }
+
+    return pixelColor;
+  }
+
+  return background;
 }
 
 std::ostream& operator<<(std::ostream& _stream, const Scene& scene) {
