@@ -6,11 +6,11 @@ Plan::Plan(Vector position, ReflectionType reflectionType, Color color)
   this->normal = Vector(0, 0, 1);
 }
 
-Plan::Plan(Vector position, float scale, ReflectionType reflectionType,
+Plan::Plan(Vector position, Vector normal, ReflectionType reflectionType,
            Color color)
     : Shape(reflectionType, color), Material(reflectionType, color) {
   this->position = position;
-  this->normal = Vector(0, 0, 1) * scale;
+  this->normal = normal;
 }
 
 Plan::~Plan() {}
@@ -51,8 +51,7 @@ bool Plan::operator==(Plan const& plan) const {
 }
 
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {
-  _stream << "Plan(Position: " << plan.position
-          << ", ReflectionType: " << plan.reflectionType
-          << ", Color: " << plan.color << ")";
+  _stream << "Plan(" << plan.position << ", " << plan.reflectionType << ", "
+          << plan.color << ")";
   return _stream;
 }

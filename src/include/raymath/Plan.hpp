@@ -18,12 +18,11 @@ class Plan : public Shape, public Material {
 
  public:
   Plan(Vector position, ReflectionType reflectionType, Color color);
-  Plan(Vector position, float scale, ReflectionType reflectionType,
+  Plan(Vector position, Vector normal, ReflectionType reflectionType,
        Color color);
   ~Plan() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;
 
-  Plan::friend std::ostream& operator<<(std::ostream& _stream,
-                                        Plan const& Plan);
+  friend std::ostream& operator<<(std::ostream& _stream, Plan const& plan);
 };
