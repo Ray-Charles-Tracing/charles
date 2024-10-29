@@ -23,12 +23,6 @@ Color ShaderDiffus::calculateShader(Color pixel,
     Color intensityColor = sphereColor * intensity;
 
     Color newPixel = pixel + intensityColor;
-    /*
-        std::cout << "Pixel: " << pixel << std::endl;
-        std::cout << "Intensity: " << intensity << std::endl;
-        std::cout << "Sphere Color: " << sphereColor << std::endl;
-        std::cout << "Intensity Color: " << intensityColor << std::endl;
-        std::cout << "New Pixel: " << newPixel << std::endl; */
 
     return newPixel;
   }
