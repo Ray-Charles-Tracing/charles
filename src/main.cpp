@@ -43,30 +43,37 @@ int main() {
   cout << "Light: " << light << std::endl;
 
   // ! This is sphere test
-  Sphere sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
+  Sphere sphere(Vector(-15, -15, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
   cout << sphere << endl;
 
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
-  // Make a red square on the top left of the image
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      float widthByTwo = width / 2;
-      float heightByTwo = height / 2;
-      float coordonateX = (x - widthByTwo) / widthByTwo;
-      float coordonateY = (y - heightByTwo) / heightByTwo;
+  // Calculate aspect ratio
+  float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
-      cout << "coordonateX : " << coordonateX
-           << ",coordonateY : " << coordonateY << std::endl;
+  // Make a red square on the top left of the image
+  float coordonateY = 1.0;
+  for (int y = 0; y < height; y++) {
+    float coordonateX = -1.0 * aspectRatio;
+    for (int x = 0; x < width; x++) {
+      // float widthByTwo = width / 2;
+      // float heightByTwo = height / 2;
+      // float coordonateX = (x - widthByTwo) / widthByTwo * aspectRatio;
+      // float coordonateY = (height - y - 1 - heightByTwo) / heightByTwo;
+
       // ! This is Ray test
       Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
+      // cout << "Ray direction: " << ray.getDirection() << std::endl;
       std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
       Color pixelColor =
           shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
                                      sphere);  // ! This is Shader test
       image.SetPixel(x, y, pixelColor);
+
+      coordonateX += 2.0 * aspectRatio / width;
     }
+    coordonateY -= 2.0 / height;
   }
 
   image.WriteFile("./render/test.png");
