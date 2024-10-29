@@ -6,6 +6,7 @@
 #include <rayimage/Image.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
+#include <raymath/Plan.hpp>
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
 #include <raymath/Shader.hpp>
@@ -32,8 +33,8 @@ int main() {
   cout << "Yellow : " << yellow << std::endl;
 
   // Create an image in memory, and fill it with yellow
-  int width = 1920;
-  int height = 1920;
+  int width = 512;
+  int height = 512;
   Image image(width, height);
 
   // Create a light source
@@ -49,6 +50,9 @@ int main() {
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
+  // Make a plan
+  Plan plan(Vector(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0), Vector(0, 0, 1));
+
   // Make a red square on the top left of the image
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -60,11 +64,20 @@ int main() {
       cout << "coordonateX : " << coordonateX
            << ",coordonateY : " << coordonateY << std::endl;
       // ! This is Ray test
+      // Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
+      // std::optional<Vector> intersectPointOpt =
+      // sphere.getIntersectPoint(ray); Color pixelColor =
+      //     shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
+      //                                sphere);  // ! This is Shader test
+      // image.SetPixel(x, y, pixelColor);
+
+      // Création d'un rayon
       Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
-      std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
-      Color pixelColor =
-          shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
-                                     sphere);  // ! This is Shader test
+      std::optional<Vector> intersectPointOpt = plan.getIntersectPoint(ray);
+
+      // Calcul de la couleur du pixel
+      Color pixelColor = shaderFlat.calculateShader(
+          Color(0, 0, 0), intersectPointOpt, ray, sphere);
       image.SetPixel(x, y, pixelColor);
     }
   }
