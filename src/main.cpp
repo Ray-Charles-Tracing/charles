@@ -32,8 +32,8 @@ int main() {
   cout << "Yellow : " << yellow << std::endl;
 
   // Create an image in memory, and fill it with yellow
-  int width = 512;
-  int height = 512;
+  int width = 1920;
+  int height = 1920;
   Image image(width, height);
 
   // Create a light source
@@ -43,7 +43,7 @@ int main() {
   cout << "Light: " << light << std::endl;
 
   // ! This is sphere test
-  Sphere sphere(Vector(0, -15, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
+  Sphere sphere(Vector(-15, -15, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
   cout << sphere << endl;
 
   // ! This is Shader Flat test
@@ -53,9 +53,9 @@ int main() {
   float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
   // Make a red square on the top left of the image
-  float coordonateY = 1;
+  float coordonateY = 1.0;
   for (int y = 0; y < height; y++) {
-    float coordonateX = -1;
+    float coordonateX = -1.0 * aspectRatio;
     for (int x = 0; x < width; x++) {
       // float widthByTwo = width / 2;
       // float heightByTwo = height / 2;
@@ -71,9 +71,9 @@ int main() {
                                      sphere);  // ! This is Shader test
       image.SetPixel(x, y, pixelColor);
 
-      coordonateX = coordonateX + (2.0 / width);
+      coordonateX += 2.0 * aspectRatio / width;
     }
-    coordonateY = coordonateY - (2.0 / height);
+    coordonateY -= 2.0 / height;
   }
 
   image.WriteFile("./render/test.png");

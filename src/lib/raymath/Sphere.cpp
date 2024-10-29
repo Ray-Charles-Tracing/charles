@@ -46,14 +46,14 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
   }
 
   // Calculate distance between real intersect point and theoric intesct point
-  float theoricIntersectPointToRealIntersectPointLentgh =
+  float theoricIntersectPointToRealIntersectPointLength =
       std::sqrt((radius * radius) - (centerToTheoricIntersectPointLength *
                                      centerToTheoricIntersectPointLength));
 
   // Calculate real intersect point position
   Vector theoricIntersectPointToRealIntersectPointDirection =
       ray.getDirection() *
-      (-1 * theoricIntersectPointToRealIntersectPointLentgh);
+      (-1 * theoricIntersectPointToRealIntersectPointLength);
 
   Vector realIntersectPoint =
       theoricIntersectPoint +
