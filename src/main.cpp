@@ -9,6 +9,7 @@
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
 #include <raymath/Shader.hpp>
+#include <raymath/ShaderDiffus.hpp>
 #include <raymath/ShaderFlat.hpp>
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
@@ -49,8 +50,13 @@ int main() {
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
+
+  // ! This is Shader Diffus test
+  ShaderDiffus shaderDiffus;
+
   // Calculate aspect ratio
   float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+
 
   // Make a red square on the top left of the image
   float coordonateY = 1.0;
@@ -67,11 +73,12 @@ int main() {
       // cout << "Ray direction: " << ray.getDirection() << std::endl;
       std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
       Color pixelColor =
-          shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
-                                     sphere);  // ! This is Shader test
-      image.SetPixel(x, y, pixelColor);
+          shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray, sphere, light);  // ! This is Shader test
+      Color pixelColorDiffus = shaderDiffus.calculateShader(Color(0, 0, 0), intersectPointOpt, ray, sphere, light);  // ! This is Shader test
+      image.SetPixel(x, y, pixelColorDiffus);
 
       coordonateX += 2.0 * aspectRatio / width;
+
     }
     coordonateY -= 2.0 / height;
   }
