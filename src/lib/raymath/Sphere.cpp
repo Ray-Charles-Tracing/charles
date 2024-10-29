@@ -24,10 +24,9 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
 
   // Calculate projection of direction vector on ray direction vector
   float scalarProductOfCameraSphereDirectionToRay =
-      cameraSphereDirection.computeScalable(ray.getDirection().normalize());
+      cameraSphereDirection.computeScalable(ray.getDirection());
   Vector cameraSphereDirectionProjection =
-      ray.getDirection().normalize() *
-      scalarProductOfCameraSphereDirectionToRay;
+      ray.getDirection() * scalarProductOfCameraSphereDirectionToRay;
 
   // Calulate theoric intersect pointCalcule la position du point
   // d'intersection théorique
@@ -53,7 +52,7 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
 
   // Calculate real intersect point position
   Vector theoricIntersectPointToRealIntersectPointDirection =
-      ray.getDirection().normalize() *
+      ray.getDirection() *
       (-1 * theoricIntersectPointToRealIntersectPointLentgh);
 
   Vector realIntersectPoint =
@@ -73,8 +72,8 @@ bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {
   Vector cameraSphereDirectionNormalized = cameraSphereDirection.normalize();
   // Calculate scalar product between normalised direction vector and
   // normalised ray vector
-  float scalarProduct = cameraSphereDirectionNormalized.computeScalable(
-      ray.getDirection().normalize());
+  float scalarProduct =
+      cameraSphereDirectionNormalized.computeScalable(ray.getDirection());
 
   // std::cout << "Norme" << cameraSphereDirectionNorm << "Direction nomalisé"
   //           << cameraSphereDirection << "Produit scalaire" << scalarProduct
