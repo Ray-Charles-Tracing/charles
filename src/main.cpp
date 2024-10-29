@@ -9,6 +9,7 @@
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
 #include <raymath/Shader.hpp>
+#include <raymath/ShaderDiffus.hpp>
 #include <raymath/ShaderFlat.hpp>
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
@@ -49,6 +50,9 @@ int main() {
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
+  // ! This is Shader Diffus test
+  ShaderDiffus shaderDiffus;
+
   // Make a red square on the top left of the image
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -57,15 +61,18 @@ int main() {
       float coordonateX = (x - widthByTwo) / widthByTwo;
       float coordonateY = (y - heightByTwo) / heightByTwo;
 
-      cout << "coordonateX : " << coordonateX
-           << ",coordonateY : " << coordonateY << std::endl;
+      /* cout << "coordonateX : " << coordonateX
+           << ",coordonateY : " << coordonateY << std::endl; */
       // ! This is Ray test
       Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
       std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
       Color pixelColor =
           shaderFlat.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
-                                     sphere);  // ! This is Shader test
-      image.SetPixel(x, y, pixelColor);
+                                     sphere, light);  // ! This is Shader test
+      Color pixelColorDiffus =
+          shaderDiffus.calculateShader(Color(0, 0, 0), intersectPointOpt, ray,
+                                       sphere, light);  // ! This is Shader test
+      image.SetPixel(x, y, pixelColorDiffus);
     }
   }
 
