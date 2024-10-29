@@ -12,4 +12,7 @@ class Ray {
  public:
   Ray(Vector origin, Vector direction);
   ~Ray();
+
+  Vector getOrigin();
+  Vector getDirection();
 };
