@@ -1,6 +1,7 @@
 #include "../../include/rayimage/Camera.hpp"
 
-Camera::Camera(Vector position, float fov, Image image, ShaderPhong shader)
+Camera::Camera(Vector position, float fov, Image image,
+               std::shared_ptr<Shader> shader)
     : position(position), fov(fov), image(image), shader(shader) {
   std::cout << "Creating camera..." << std::endl;
 }
@@ -16,8 +17,10 @@ void Camera::SetFov(float fov) { this->fov = fov; }
 Image& Camera::GetImage() { return image; }
 void Camera::SetImage(Image image) { this->image = image; }
 
-ShaderPhong Camera::GetShader() const { return shader; }
-void Camera::SetShader(ShaderPhong shader) { this->shader = shader; }
+std::shared_ptr<Shader> Camera::GetShader() const { return shader; }
+void Camera::SetShader(std::shared_ptr<Shader> shader) {
+  this->shader = shader;
+}
 
 void Camera::Render(Image renderImage) {
   std::cout << "Rendering image..." << std::endl;

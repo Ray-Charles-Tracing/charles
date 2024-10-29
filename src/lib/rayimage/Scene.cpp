@@ -39,7 +39,7 @@ Image Scene::rayCast() {
   Image& image = camera.GetImage();
   int width = image.GetWidth();
   int height = image.GetHeight();
-  ShaderPhong shader = camera.GetShader();
+  std::shared_ptr<Shader> shader = camera.GetShader();
   Vector cameraPosition = camera.GetPosition();
 
   float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
@@ -84,7 +84,7 @@ Image Scene::rayCast() {
         // Ensure the closestSphere is of type Sphere before casting
         if (closestIntersectPoint.has_value()) {
           for (const auto& light : lights) {
-            pixelColor += shader.calculateShader(
+            pixelColor += shader->calculateShader(
                 pixelColor, closestIntersectPoint, ray, *closestSphere, light);
           }
         }

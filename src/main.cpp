@@ -3,6 +3,10 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <vector>
+
+// Include our class definition - we can read it thanks to
+// `target_include_directories`
 #include <rayimage/Camera.hpp>
 #include <rayimage/Image.hpp>
 #include <rayimage/Scene.hpp>
@@ -18,7 +22,6 @@
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
 #include <raymath/Vector.hpp>
-#include <vector>
 
 using namespace std;
 
@@ -49,10 +52,11 @@ int main() {
       Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
       Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
 
-  ShaderPhong shaderPhong;
+  // Create a shared pointer to the shader
+  std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
 
   // Initialize the camera
-  Camera camera(Vector(0, 0, 0), 1.0, image, shaderPhong);
+  Camera camera(Vector(0, 0, 0), 1.0, image, shader);
 
   // Initialize the scene
   Scene scene(Vector(0, 0, 0), camera, std::move(lights), black,

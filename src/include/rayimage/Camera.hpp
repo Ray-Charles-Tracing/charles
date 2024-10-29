@@ -1,9 +1,10 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
 #include "../../include/rayimage/Image.hpp"
-#include "../../include/raymath/ShaderPhong.hpp"
+#include "../../include/raymath/Shader.hpp"
 #include "../../include/raymath/Vector.hpp"
 
 class Camera {
@@ -11,10 +12,11 @@ class Camera {
   Vector position;
   float fov;
   Image image;
-  ShaderPhong shader;
+  std::shared_ptr<Shader> shader;  // Use shared_ptr to manage the shader
 
  public:
-  Camera(Vector position, float fov, Image image, ShaderPhong shader);
+  Camera(Vector position, float fov, Image image,
+         std::shared_ptr<Shader> shader);
   ~Camera();
 
   Vector GetPosition() const;
@@ -26,8 +28,8 @@ class Camera {
   Image& GetImage();
   void SetImage(Image image);
 
-  ShaderPhong GetShader() const;
-  void SetShader(ShaderPhong shader);
+  std::shared_ptr<Shader> GetShader() const;
+  void SetShader(std::shared_ptr<Shader> shader);
 
   void Render(Image renderImage);
 
