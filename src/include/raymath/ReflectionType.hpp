@@ -2,7 +2,6 @@
 #pragma once
 
 enum class ReflectionType {
-  DIFFUSE,
-  SPECULAR,
-  REFRACTIVE,
+  MAT,
+  REFLECTIVE,
 };

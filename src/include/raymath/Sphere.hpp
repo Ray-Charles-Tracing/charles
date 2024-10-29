@@ -1,7 +1,11 @@
 #pragma once
 
+#include <iostream>
+#include <optional>
+
 #include "Color.hpp"
 #include "Material.hpp"
+#include "Ray.hpp"
 #include "ReflectionType.hpp"
 #include "Shape.hpp"
 #include "Vector.hpp"
@@ -9,6 +13,8 @@
 class Sphere : public Shape, public Material {
  private:
   float radius;
+  bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
+  bool isIntersect(float centerToTheoricIntersectPointLength) const override;
 
  public:
   Sphere(Vector position, float radius, ReflectionType reflectionType,
@@ -17,7 +23,7 @@ class Sphere : public Shape, public Material {
          ReflectionType reflectionType, Color color);
   ~Sphere() override = default;
 
-  Vector intersect(Vector const& ray) const override;
+  std::optional<Vector> getIntersectPoint(Ray ray) const override;
 
   friend std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere);
 };
