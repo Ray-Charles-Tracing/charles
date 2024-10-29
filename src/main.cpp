@@ -32,7 +32,9 @@ int main() {
   cout << "Yellow : " << yellow << std::endl;
 
   // Create an image in memory, and fill it with yellow
-  Image image(512, 512);
+  int width = 1920;
+  int height = 1920;
+  Image image(width, height);
 
   // Create a light source
   Light light(Color(1, 1, 1),
@@ -41,17 +43,22 @@ int main() {
   cout << "Light: " << light << std::endl;
 
   // ! This is sphere test
-  Sphere sphere(Vector(0, 0, 15), 3, ReflectionType::MAT, Color(1, 1, 1));
+  Sphere sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
   cout << sphere << endl;
 
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
   // Make a red square on the top left of the image
-  for (int y = 0; y < 512; y++) {
-    for (int x = 0; x < 512; x++) {
-      float coordonateX = (x - 256) / 256.0;
-      float coordonateY = (y - 256) / 256.0;
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      float widthByTwo = width / 2;
+      float heightByTwo = height / 2;
+      float coordonateX = (x - widthByTwo) / widthByTwo;
+      float coordonateY = (y - heightByTwo) / heightByTwo;
+
+      cout << "coordonateX : " << coordonateX
+           << ",coordonateY : " << coordonateY << std::endl;
       // ! This is Ray test
       Ray ray(Vector(0, 0, 0), Vector(coordonateX, coordonateY, 1));
       std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
