@@ -6,12 +6,12 @@
 
 Color ShaderPecular::calculateShader(Color pixel,
                                      std::optional<Vector> intersectionPointOpt,
-                                     Ray ray, Sphere sphere,
+                                     Ray ray, const Shape& shape,
                                      Light light) const {
   if (intersectionPointOpt.has_value()) {
     Vector intersectionPoint = *intersectionPointOpt;
-    Vector spherePos = sphere.getPosition();
-    Vector cp = intersectionPoint - spherePos;
+    Vector shapePos = shape.getPosition();
+    Vector cp = intersectionPoint - shapePos;
     Vector normal = cp.normalize();
 
     Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
@@ -35,9 +35,9 @@ Color ShaderPecular::calculateShader(Color pixel,
     Color specularColor = Color(1.0f, 1.0f, 1.0f) * k_s * specularIntensity;
 
     // Couleur diffuse
-    Color sphereColor = sphere.getColor();
+    Color shapeColor = shape.getColor();
     float diffuseIntensity = std::max(0.0f, normal.computeScalable(lightDir));
-    Color diffuseColor = sphereColor * diffuseIntensity;
+    Color diffuseColor = shapeColor * diffuseIntensity;
 
     // Ajout des couleurs diffuse et spéculaire
     Color newPixel = pixel + diffuseColor + specularColor;

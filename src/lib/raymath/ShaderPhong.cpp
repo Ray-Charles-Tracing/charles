@@ -4,11 +4,12 @@
 
 Color ShaderPhong::calculateShader(Color pixel,
                                    std::optional<Vector> intersectionPointOpt,
-                                   Ray ray, Sphere sphere, Light light) const {
+                                   Ray ray, const Shape& shape,
+                                   Light light) const {
   if (intersectionPointOpt.has_value()) {
     Vector intersectionPoint = *intersectionPointOpt;
-    Vector spherePos = sphere.getPosition();
-    Vector cp = intersectionPoint - spherePos;
+    Vector shapePos = shape.getPosition();
+    Vector cp = intersectionPoint - shapePos;
     Vector normal = cp.normalize();
 
     Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
@@ -27,9 +28,9 @@ Color ShaderPhong::calculateShader(Color pixel,
 
     // Calcul de l'intensité diffuse
     float diffuseIntensity = std::max(0.0f, normal.computeScalable(lightDir));
-    Color sphereColor = sphere.getColor();
+    Color shapeColor = shape.getColor();
     Color lightColor = light.getColor();
-    Color diffuseColor = sphereColor * k_d * diffuseIntensity * lightColor;
+    Color diffuseColor = shapeColor * k_d * diffuseIntensity * lightColor;
 
     // Calcul de l'intensité spéculaire
     float specularIntensity =

@@ -13,6 +13,7 @@ class Shader {
  public:
   virtual Color calculateShader(Color pixel,
                                 std::optional<Vector> intersectionPoint,
-                                Ray ray, Sphere sphere, Light light) const = 0;
+                                Ray ray, const Shape& shape,
+                                Light light) const = 0;
   virtual ~Shader() = default;
 };

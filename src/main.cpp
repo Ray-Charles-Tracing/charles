@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <vector>
 
@@ -37,10 +38,13 @@ int main() {
                           Light(Color(1, 1, 1), Vector(0, 45, 0)) */};
 
   // Liste des sphères
-  vector<Sphere> spheres = {
-      Sphere(Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)),
-      Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
-      Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
+  std::vector<std::unique_ptr<Shape>> shapes;
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0)));
 
   ShaderPhong shaderPhong;
 
@@ -62,11 +66,11 @@ int main() {
       float closestDistance = numeric_limits<float>::max();
       Color pixelColorPhong;
       optional<Vector> closestIntersectPoint;
-      Sphere* closestSphere = nullptr;
+      Shape* closestShape = nullptr;
 
-      for (auto& sphere : spheres) {  // Trier spheres par ordre de profondeur,
-                                      // la plus proche en premier
-        optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+      for (auto& shape : shapes) {  // Trier spheres par ordre de profondeur,
+                                    // la plus proche en premier
+        optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
         float distance = intersectPointOpt.has_value()
                              ? (ray.getOrigin() - *intersectPointOpt).getNorm()
                              : numeric_limits<float>::max();
@@ -74,15 +78,15 @@ int main() {
         if (distance < closestDistance) {
           closestDistance = distance;
           closestIntersectPoint = intersectPointOpt;
-          closestSphere = &sphere;
+          closestShape = shape.get();
         }
       }
 
-      if (closestSphere) {
+      if (closestShape) {
         for (const auto& light : lights) {
           if (closestIntersectPoint.has_value()) {
             pixelColorPhong += shaderPhong.calculateShader(
-                Color(0, 0, 0), closestIntersectPoint, ray, *closestSphere,
+                Color(0, 0, 0), closestIntersectPoint, ray, *closestShape,
                 light);
           }
         }
