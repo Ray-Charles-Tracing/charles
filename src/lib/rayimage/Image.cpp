@@ -45,6 +45,7 @@ void Image::WriteFile(const char* filename) {
   image.resize(width * height * 4);
   for (unsigned index = 0; index < buffer.size(); index++) {
     Color pixel = buffer[index];
+    // std::cout << "Writing pixel: " << pixel << std::endl;
     int offset = index * 4;
 
     image[offset] = (unsigned int)floor(pixel.R() * 255);
