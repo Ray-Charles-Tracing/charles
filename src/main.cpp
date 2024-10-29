@@ -47,6 +47,9 @@ int main() {
   Sphere sphere(Vector(-15, -15, 45), 6, ReflectionType::MAT, Color(0, 1, 1));
   cout << sphere << endl;
 
+  Plan ground(Vector(0, -10, 0), Vector(0, 1, 0), ReflectionType::MAT, gray);
+  cout << ground << endl;
+
   // ! This is Shader Flat test
   ShaderFlat shaderFlat;
 
