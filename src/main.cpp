@@ -1,3 +1,4 @@
+#include <chrono>
 #include <cmath>
 #include <filesystem>
 #include <iostream>
@@ -62,9 +63,22 @@ int main() {
   Scene scene(Vector(0, 0, 0), camera, std::move(lights), black,
               std::move(spheres));
 
+  // Start the timer for rendering
+  auto start = std::chrono::high_resolution_clock::now();
+
   // Execute raycasting and render the image
   Image renderImage = scene.rayCast();
   camera.Render(renderImage);
+
+  // Stop the timer for rendering
+  auto end = std::chrono::high_resolution_clock::now();
+
+  // Calculate the duration
+  std::chrono::duration<double> duration = end - start;
+
+  // Print the duration
+  std::cout << "Rendering time: " << duration.count() << " seconds"
+            << std::endl;
 
   return 0;
 }

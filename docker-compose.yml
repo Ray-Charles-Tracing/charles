@@ -6,5 +6,4 @@ services:
     volumes:
       - ./render:/app/render
       - ./src:/app/src
-    command: ./main
-    # command: tail -f /dev/null
+    command: ["sh", "-c", "/usr/bin/time -f 'Global elapsed time: %E' ./main"]
