@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "../../include/rayimage/Camera.hpp"
@@ -16,11 +17,11 @@ class Scene {
   Camera camera;
   std::vector<Light> lights;
   Color background;
-  std::vector<Shape> shapes;
+  std::vector<std::unique_ptr<Shape>>&& shapes;
 
  public:
   Scene(Vector const& origin, Camera const& camera, std::vector<Light> lights,
-        Color const& background, std::vector<Shape> shapes);
+        Color const& background, std::vector<std::unique_ptr<Shape>>&& shapes);
   ~Scene();
 
   Vector GetOrigin() const;

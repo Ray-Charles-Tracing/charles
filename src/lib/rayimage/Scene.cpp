@@ -7,7 +7,7 @@
 
 Scene::Scene(Vector const& origin, Camera const& camera,
              std::vector<Light> lights, Color const& background,
-             std::vector<Shape> shapes)
+             std::vector<std::unique_ptr<Shape>>&& shapes)
     : origin(origin),
       camera(camera),
       lights(std::move(lights)),
@@ -66,7 +66,7 @@ Image Scene::rayCast() {
         // `std::optional` is used to represent optional values that may or may
         // not be present. It is used here to handle the case where there is no
         // intersection point.
-        std::optional<Vector> intersectPointOpt = shape.getIntersectPoint(ray);
+        std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
         float distance = intersectPointOpt.has_value()
                              ? (ray.getOrigin() - *intersectPointOpt).getNorm()
                              : std::numeric_limits<float>::max();
@@ -74,7 +74,8 @@ Image Scene::rayCast() {
         if (distance < closestDistance) {
           closestDistance = distance;
           closestIntersectPoint = intersectPointOpt;
-          closestShape = &shape;  // Get the raw pointer from the unique_ptr
+          closestShape =
+              shape.get();  // Get the raw pointer from the unique_ptr
         }
       }
 
