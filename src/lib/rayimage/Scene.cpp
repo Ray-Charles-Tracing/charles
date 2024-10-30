@@ -43,8 +43,8 @@ Image Scene::rayCast(int maxReflections) {
   Vector cameraPosition = camera.GetPosition();
 
   float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-  float coordonateXIncrement = 2.0 * aspectRatio / width;
-  float coordonateYIncrement = 2.0 / height;
+  float coordonateXIncrement = 1.0 * aspectRatio / width;
+  float coordonateYIncrement = 1.0 / height;
 
   // Parallelize the nested loops
   // `#pragma omp parallel for collapse(2)` creates a parallel region and
@@ -52,16 +52,17 @@ Image Scene::rayCast(int maxReflections) {
   // `collapse(2)` clause combines the two loops into a single loop for better
   // load balancing.
 #pragma omp parallel for collapse(2)
+  float coordonateY = 0.5;
   for (int y = 0; y < height; y++) {
+    float coordonateX = -0.5 * aspectRatio;
     for (int x = 0; x < width; x++) {
-      float coordonateX = -1.0 * aspectRatio + x * coordonateXIncrement;
-      float coordonateY = 1.0 - y * coordonateYIncrement;
-
       Ray ray(cameraPosition, Vector(coordonateX, coordonateY, 1));
       Color pixelColor = traceRay(ray, maxReflections);
 
       image.SetPixel(x, y, pixelColor);
+      coordonateX += coordonateXIncrement;
     }
+    coordonateY -= coordonateYIncrement;
   }
 
   std::cout << "Ray casting completed." << std::endl;
