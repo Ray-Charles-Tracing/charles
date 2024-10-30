@@ -1,49 +1,44 @@
-#include "../include/raymath/Plan.hpp"
+#include "../../include/raymath/Plan.hpp"
 
-// Constructeur du plan avec normale définie
+#include <cmath>
+#include <iostream>
+#include <optional>
+#include <vector>
+
 Plan::Plan(Vector position, Vector normal, ReflectionType reflectionType,
            Color color)
-    : Shape(reflectionType, color),
-      Material(reflectionType, color),
-      normal(normal) {
-  this->position = position;
-}
+    : Shape(position, reflectionType, color), normal(normal) {}
 
-// Constructeur du plan avec une normale par défaut
 Plan::Plan(Vector position, ReflectionType reflectionType, Color color)
-    : Shape(reflectionType, color),
-      Material(reflectionType, color),
-      normal(Vector(0, 0, 1)) {
-  this->position = position;
+    : Shape(position, reflectionType, color), normal(Vector(0, 1, 0)) {}
+
+bool Plan::isVisible(Ray ray, Vector cameraPlanDirection) const {
+  float cameraPlanDirectionNorm = cameraPlanDirection.getNorm();
+
+  Vector cameraPlanDirectionNormalized = cameraPlanDirection.normalize();
+
+  float scalarProduct =
+      cameraPlanDirectionNormalized.computeScalable(ray.getDirection());
+
+  if (scalarProduct > 0) {
+    return true;
+  }
+  return false;
 }
 
-// Calcule le point d'intersection entre le rayon et le plan
+bool Plan::isIntersect(float centerToTheoricIntersectPointLength) const {
+  // TODOREVIEW SA : Vérifier si le plan est bien intersecté
+  return true;
+}
+
 std::optional<Vector> Plan::getIntersectPoint(Ray ray) const {
-  Vector rayDirection = ray.getDirection();
-  Vector rayOrigin = ray.getOrigin();
+  Vector cameraPlanDirection = getPosition() - ray.getOrigin();
 
-  // Calcul du produit scalaire entre la normale et la direction du rayon
-  float denominator = normal.computeScalable(rayDirection);
-
-  // Si le produit scalaire est nul, le rayon est parallèle au plan
-  if (denominator == 0) {
+  if (isVisible(ray, cameraPlanDirection) == false) {
     return std::nullopt;
   }
-
-  // Calcul de la distance t au point d'intersection
-  Vector aMinusRayOrigin = position - rayOrigin;
-  float t = normal.computeScalable(aMinusRayOrigin) / denominator;
-
-  // Si t est négatif, l'intersection est derrière le rayon
-  if (t < 0) {
-    return std::nullopt;
-  }
-
-  // Retourne le point d'intersection
-  return rayOrigin + rayDirection * t;
 }
 
-// Surcharge de l'opérateur pour afficher les informations du plan
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {
   _stream << "Plan(Position: " << plan.position << ", Normal: " << plan.normal
           << ", ReflectionType: " << plan.reflectionType
