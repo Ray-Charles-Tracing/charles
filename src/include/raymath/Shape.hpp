@@ -19,6 +19,7 @@ class Shape : public Material {
     Vector intersectPoint;  // Intersection point
     Vector normal;          // Normal vector at the intersection
   };
+
   Shape(Vector position, float scale, Color color,
         ReflectionType reflectionType,
         MaterialType materialType)  // Change here
@@ -40,7 +41,7 @@ class Shape : public Material {
   Vector getPosition() const { return position; }
 
   float getScale() const { return scale; }
-  virtual std::optional<IntersectionResult> getIntersectPoint(
+  virtual std::optional<IntersectionResult> getIntersectResult(
       Ray ray) const = 0;
 
   friend std::ostream& operator<<(std::ostream& _stream, Shape const& shape) {

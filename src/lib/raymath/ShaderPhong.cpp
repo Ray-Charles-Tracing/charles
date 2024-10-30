@@ -2,30 +2,30 @@
 
 #include <cmath>
 
-Color ShaderPhong::calculateShader(Color pixel,
-                                   std::optional<Vector> intersectionPointOpt,
-                                   Ray ray, const Shape& shape,
-                                   Light light) const {
-  if (intersectionPointOpt.has_value()) {
+Color ShaderPhong::calculateShader(
+    Color pixel, std::optional<Shape::IntersectionResult> intersectionResultOpt,
+    Ray ray, const Shape& shape, Light light) const {
+  if (intersectionResultOpt.has_value()) {
+    // Initialize variables
     Color shapeColor = shape.getColor();
     Color lightColor = light.getColor();
+    Vector intersectionPoint = intersectionResultOpt.value().intersectPoint;
+    Vector normal = intersectionResultOpt.value().normal;
 
-    // Coefficient de réflexion diffuse
+    // Coefficient de réflexion diffuse et rugosité
     float k_d = shape.getDiffuseReflexionCoef();
+    float roughness = shape.getRoughness();
 
     // Get bases diffuse values
-    Vector intersectionPoint, normal, lightDir, viewDir;
-    std::tie(intersectionPoint, normal, lightDir, viewDir) =
-        this->getDiffuseBases(*intersectionPointOpt, ray, shape, light);
+    Vector lightDir, viewDir;
+    std::tie(lightDir, viewDir) =
+        this->getDiffuseBases(intersectionPoint, ray, shape, light);
 
     // Get bases diffuse values
     float diffuseIntensity;
     Color specularColor;
     std::tie(diffuseIntensity, specularColor) = this->getSpeculareBases(
         lightDir, normal, shape, viewDir, lightColor, light);
-
-    // Obtenir la rugosité
-    float roughness = shape.getRoughness();
 
     // Ajuster l'intensité spéculaire en fonction de la rugosité
     float adjustedSpecularIntensity =

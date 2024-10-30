@@ -18,7 +18,8 @@ Triangle::Triangle(Vector a, Vector b, Vector c, float scale,
       b(b),
       c(c) {}
 
-std::optional<IntersectionResult> Triangle::getIntersectPoint(Ray ray) const {
+std::optional<Shape::IntersectionResult> Triangle::getIntersectResult(
+    Ray ray) const {
   // Find the theoretical intersect points?
 
   // Calculate the edges of the triangle
@@ -63,15 +64,18 @@ std::optional<IntersectionResult> Triangle::getIntersectPoint(Ray ray) const {
   }
 }
 
+// ! A implémenter dans la méthode getIntersectResult
 bool Triangle::isVisible(Ray ray, Vector cameraTriangleDirection) const {
   // Basic visibility check, e.g., could return true if the triangle's normal
   // faces the camera or based on other visibility logic
+  return true;
 }
 
 bool Triangle::isIntersect(float centerToTheoricIntersectPointLength) const {
   // Basic intersection check, e.g., could return true if the distance between
   // the sphere center and the theoretical intersection point is less than the
   // sphere's radius
+  return true;
 }
 
 std::ostream& operator<<(std::ostream& _stream, Triangle const& triangle) {

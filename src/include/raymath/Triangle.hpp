@@ -26,7 +26,7 @@ class Triangle : public Shape {
            MaterialType materialType);
   ~Triangle() override = default;
 
-  std::optional<Vector> getIntersectPoint(Ray ray) const override;
+  std::optional<IntersectionResult> getIntersectResult(Ray ray) const override;
 
   friend std::ostream& operator<<(std::ostream& _stream,
                                   Triangle const& triangle);
