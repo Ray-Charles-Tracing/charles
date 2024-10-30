@@ -9,25 +9,6 @@
 #include "Shape.hpp"
 #include "Vector.hpp"
 
-// class Plan : public Shape {
-//  private:
-//   Vector normal;
-//   bool isVisible(Ray ray, Vector cameraShapeDirection) const override;
-//   bool isIntersect(float centerToTheoricIntersectPointLength) const;
-
-//  public:
-//   Plan(Vector position, Vector normal, ReflectionType reflectionType,
-//        Color color);
-//   //   Plan(Vector position, Vector normal, ReflectionType reflectionType,
-//   //        Color color, float diffuseReflexionCoef, float
-//   //        specularReflexionCoef);
-//   ~Plan() override = default;
-
-//   std::optional<Vector> getIntersectPoint(Ray ray) const override;
-
-//   friend std::ostream& operator<<(std::ostream& _stream, Plan const& plan);
-// }
-
 class Plan : public Shape {
  private:
   Vector normal;
@@ -36,10 +17,9 @@ class Plan : public Shape {
 
  public:
   Plan(Vector position, Vector normal, ReflectionType reflectionType,
-       Color color);
+       Color color, MaterialType materialType);
   Plan(Vector position, float scale, Vector normal,
-       ReflectionType reflectionType, Color color, float diffuseReflexionCoef,
-       float specularReflexionCoef);
+       ReflectionType reflectionType, Color color, MaterialType materialType);
   ~Plan() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;

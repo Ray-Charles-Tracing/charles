@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "Color.hpp"
+#include "MaterialType.hpp"
 #include "Ray.hpp"
 #include "ReflectionType.hpp"
 #include "Shape.hpp"
@@ -17,10 +18,11 @@ class Sphere : public Shape {
 
  public:
   Sphere(Vector position, float radius, ReflectionType reflectionType,
-         Color color);
+         Color color, MaterialType materialType);
+
   Sphere(Vector position, float scale, float radius,
-         ReflectionType reflectionType, Color color, float diffuseReflexionCoef,
-         float specularReflexionCoef);
+         ReflectionType reflectionType, Color color, MaterialType materialType);
+
   ~Sphere() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;

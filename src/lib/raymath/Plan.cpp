@@ -6,14 +6,13 @@
 #include <vector>
 
 Plan::Plan(Vector position, Vector normal, ReflectionType reflectionType,
-           Color color)
-    : Shape(position, color, reflectionType), normal(normal) {}
+           Color color, MaterialType materialType)
+    : Shape(position, color, reflectionType, materialType), normal(normal) {}
 
 Plan::Plan(Vector position, float scale, Vector normal,
            ReflectionType reflectionType, Color color,
-           float diffuseReflexionCoef, float specularReflexionCoef)
-    : Shape(position, scale, color, reflectionType, diffuseReflexionCoef,
-            specularReflexionCoef),
+           MaterialType materialType)
+    : Shape(position, scale, color, reflectionType, materialType),
       normal(normal) {}
 
 bool Plan::isVisible(Ray ray, Vector cameraShapeDirection) const {

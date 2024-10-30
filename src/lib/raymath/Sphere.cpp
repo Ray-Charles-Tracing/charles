@@ -5,97 +5,58 @@
 #include <optional>
 
 Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
-               Color color)
-    : Shape(position, color, reflectionType), radius(radius) {}
+               Color color, MaterialType materialType)
+    : Shape(position, color, reflectionType, materialType), radius(radius) {}
 
 Sphere::Sphere(Vector position, float scale, float radius,
                ReflectionType reflectionType, Color color,
-               float diffuseReflexionCoef, float specularReflexionCoef)
-    : Shape(position, scale, color, reflectionType, diffuseReflexionCoef,
-            specularReflexionCoef),
+               MaterialType materialType)
+    : Shape(position, scale, color, reflectionType, materialType),
       radius(radius) {}
 
 std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
-  // Calculate direction vector between camera origin and sphere center
   Vector cameraSphereDirection = getPosition() - ray.getOrigin();
-
-  // Verify if sphere is visible from camera
-  if (isVisible(ray, cameraSphereDirection) == false) {
-    // std::cout << "Not visible" << std::endl;
+  if (!isVisible(ray, cameraSphereDirection)) {
     return std::nullopt;
   }
 
-  // Calculate projection of direction vector on ray direction vector
   float scalarProductOfCameraSphereDirectionToRay =
       cameraSphereDirection.computeScalable(ray.getDirection());
   Vector cameraSphereDirectionProjection =
       ray.getDirection() * scalarProductOfCameraSphereDirectionToRay;
 
-  // Calulate theoric intersect pointCalcule la position du point
-  // d'intersection théorique
   Vector theoricIntersectPoint =
       ray.getOrigin() + cameraSphereDirectionProjection;
-
-  // Calculate distance between sphere center and theoric intersect point
   Vector centerToTheoricIntersectPointDirection =
       theoricIntersectPoint - getPosition();
   float centerToTheoricIntersectPointLength =
       centerToTheoricIntersectPointDirection.getNorm();
 
-  // Verify intersection
-  if (isIntersect(centerToTheoricIntersectPointLength) == false) {
-    // std::cout << "Not intersect" << std::endl;
+  if (!isIntersect(centerToTheoricIntersectPointLength)) {
     return std::nullopt;
   }
 
-  // Calculate distance between real intersect point and theoric intesct point
   float theoricIntersectPointToRealIntersectPointLength =
       std::sqrt((radius * radius) - (centerToTheoricIntersectPointLength *
                                      centerToTheoricIntersectPointLength));
-
-  // Calculate real intersect point position
   Vector theoricIntersectPointToRealIntersectPointDirection =
       ray.getDirection() *
       (-1 * theoricIntersectPointToRealIntersectPointLength);
-
   Vector realIntersectPoint =
       theoricIntersectPoint +
       theoricIntersectPointToRealIntersectPointDirection;
 
   return realIntersectPoint;
-
-  // return Vector(0, 0, 0);
 }
 
-bool Sphere::isVisible(Ray ray, Vector cameraShapeDirection) const {
-  // Calculate length of the direction vector
-  float cameraSphereDirectionNorm = cameraShapeDirection.getNorm();
-  // Normalise direction vector
-  // ! Verifier normalize
-  Vector cameraSphereDirectionNormalized = cameraShapeDirection.normalize();
-  // Calculate scalar product between normalised direction vector and
-  // normalised ray vector
+bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {
   float scalarProduct =
-      cameraSphereDirectionNormalized.computeScalable(ray.getDirection());
-
-  // std::cout << "Norme" << cameraSphereDirectionNorm << "Direction nomalisé"
-  //           << cameraSphereDirection << "Produit scalaire" << scalarProduct
-  //           << std::endl;
-  // If scalar product is greater than 0, sphere is visible
-  if (scalarProduct > 0) {
-    return true;
-  }
-  return false;
+      cameraSphereDirection.normalize().computeScalable(ray.getDirection());
+  return scalarProduct > 0;
 }
 
 bool Sphere::isIntersect(float centerToTheoricIntersectPointLength) const {
-  // std::cout << "Distance CP" << centerToTheoricIntersectPointLength <<
-  // "Rayon"
-  //           << radius << std::endl;
-  if (centerToTheoricIntersectPointLength < radius) {
-    return true;
-  }
-  return false;
+  return centerToTheoricIntersectPointLength < radius;
 }
 
 std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere) {
