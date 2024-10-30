@@ -1,6 +1,9 @@
 # Utilise une image de base avec un compilateur C++
 FROM gcc:latest
 
+# Installer le paquet time
+RUN apt-get update && apt-get install -y time
+
 # Créer un répertoire de travail dans le conteneur
 WORKDIR /app
 
@@ -20,8 +23,8 @@ RUN ar rcs ./src/lib/liblodepng.a ./src/lib/lodepng/*.o
 RUN ar rcs ./src/lib/libraymath.a ./src/lib/raymath/*.o
 RUN ar rcs ./src/lib/librayimage.a ./src/lib/rayimage/*.o
 
-# Étape 2 : Compiler le projet principal en incluant la bibliothèque statique
+# Étape 3 : Compiler le projet principal en incluant la bibliothèque statique
 RUN g++ -std=c++17 -o main src/*.cpp -I src/include -L src/lib -lrayimage -lraymath -llodepng
 
-# Définir la commande par défaut pour lancer le programme
-CMD ["./main"]
+# Définir la commande par défaut pour lancer le programme et mesurer le temps d'exécution
+CMD ["sh", "-c", "/usr/bin/time -f 'Elapsed time: %E' ./main"]

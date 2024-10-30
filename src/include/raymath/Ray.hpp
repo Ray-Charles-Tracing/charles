@@ -13,6 +13,6 @@ class Ray {
   Ray(Vector origin, Vector direction);
   ~Ray();
 
-  Vector getOrigin();
-  Vector getDirection();
+  Vector getOrigin() const;
+  Vector getDirection() const;
 };
