@@ -1,10 +1,8 @@
 #include <chrono>
 #include <cmath>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <memory>
-#include <nlohmann/json.hpp>
 #include <optional>
 #include <vector>
 
@@ -32,7 +30,7 @@
 using namespace std;
 
 int main() {
-  //   Load the configuration
+  // Load the configuration
   Config config("config.json");
   if (!config.loadConfig()) {
     return 1;

@@ -8,32 +8,47 @@
   "background": {
     "color": [0, 0, 0]
   },
-  "lights": [
-    { "color": [0, 1, 1], "position": [128, 128, 128] },
-    { "color": [1, 1, 0], "position": [-128, -128, 128] },
-    { "color": [1, 0, 1], "position": [-128, 128, 128] }
-  ],
+  "lights": [{ "color": [1, 1, 1], "position": [0, 45, 0] }],
   "shapes": [
     {
+      "type": "plan",
+      "position": [0, -10, 0],
+      "normal": [0, 1, 0],
+      "reflection_type": "mat",
+      "color": [0, 0, 1],
+      "material_type": "metal"
+    },
+    {
       "type": "sphere",
-      "position": [-4, 4, 25],
+      "position": [-15, 0, 20],
       "radius": 3,
       "reflection_type": "reflective",
-      "color": [1, 1, 0]
+      "color": [0, 1, 1],
+      "material_type": "wood"
     },
     {
       "type": "sphere",
-      "position": [6, -6, 45],
-      "radius": 6,
-      "reflection_type": "mat",
-      "color": [0, 1, 1]
+      "position": [-5, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "plastic"
     },
     {
       "type": "sphere",
-      "position": [4, -4, 15],
-      "radius": 4,
-      "reflection_type": "mat",
-      "color": [1, 0, 0]
+      "position": [5, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "metal"
+    },
+    {
+      "type": "sphere",
+      "position": [15, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "ceramic"
     }
   ],
   "max_reflections": 3

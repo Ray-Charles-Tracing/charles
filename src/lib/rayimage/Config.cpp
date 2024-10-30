@@ -6,6 +6,16 @@ const std::unordered_map<std::string, ShaderType> Config::shaderTypeMap = {
     {"diffus", ShaderType::DIFFUS},
     {"pecular", ShaderType::PECULAR}};
 
+const std::unordered_map<std::string, MaterialType> Config::materialTypeMap = {
+    {"wood", MaterialType::WOOD},
+    {"metal", MaterialType::METAL},
+    {"plastic", MaterialType::PLASTIC},
+    {"glass", MaterialType::GLASS},
+    {"ceramic", MaterialType::CERAMIC}};
+
+const std::unordered_map<std::string, ShapeType> Config::shapeTypeMap = {
+    {"sphere", ShapeType::SPHERE}, {"plan", ShapeType::PLAN}};
+
 Config::Config(const std::string& configFilePath)
     : configFilePath(configFilePath) {}
 
@@ -49,16 +59,45 @@ std::vector<Light> Config::getLights() const {
 std::vector<std::unique_ptr<Shape>> Config::getShapes() const {
   std::vector<std::unique_ptr<Shape>> shapes;
   for (const auto& shape : config["shapes"]) {
-    if (shape["type"] == "sphere") {
-      shapes.push_back(std::make_unique<Sphere>(
-          Vector(shape["position"][0], shape["position"][1],
-                 shape["position"][2]),
-          shape["radius"],
-          shape["reflection_type"] == "reflective" ? ReflectionType::REFLECTIVE
-                                                   : ReflectionType::MAT,
-          Color(shape["color"][0], shape["color"][1], shape["color"][2])));
+    MaterialType materialType = MaterialType::METAL;  // Default material type
+    auto it = materialTypeMap.find(shape["material_type"]);
+    if (it != materialTypeMap.end()) {
+      materialType = it->second;
     }
-    // TODO: Add other shapes later
+
+    ShapeType shapeType = ShapeType::UNKNOWN;
+    auto shapeIt = shapeTypeMap.find(shape["type"]);
+    if (shapeIt != shapeTypeMap.end()) {
+      shapeType = shapeIt->second;
+    }
+
+    switch (shapeType) {
+      case ShapeType::SPHERE:
+        shapes.push_back(std::make_unique<Sphere>(
+            Vector(shape["position"][0], shape["position"][1],
+                   shape["position"][2]),
+            shape["radius"],
+            shape["reflection_type"] == "reflective"
+                ? ReflectionType::REFLECTIVE
+                : ReflectionType::MAT,
+            Color(shape["color"][0], shape["color"][1], shape["color"][2]),
+            materialType));
+        break;
+      case ShapeType::PLAN:
+        shapes.push_back(std::make_unique<Plan>(
+            Vector(shape["position"][0], shape["position"][1],
+                   shape["position"][2]),
+            Vector(shape["normal"][0], shape["normal"][1], shape["normal"][2]),
+            shape["reflection_type"] == "reflective"
+                ? ReflectionType::REFLECTIVE
+                : ReflectionType::MAT,
+            Color(shape["color"][0], shape["color"][1], shape["color"][2]),
+            materialType));
+        break;
+      default:
+        std::cerr << "Unknown shape type: " << shape["type"] << std::endl;
+        break;
+    }
   }
   return shapes;
 }
