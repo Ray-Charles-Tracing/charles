@@ -39,7 +39,7 @@ std::optional<Vector> Plan::getIntersectPoint(Ray ray) const {
 
   // Calculer le produit scalaire entre le Vecteur Oc et la normale du plan
   float dotProductBetweenCameraPlanDirectionAndRay =
-      cameraPlanDirection.computeScalable(ray.getDirection());
+      cameraPlanDirection.computeScalable(normal);
 
   // Calculer le multiplicateur du rayon normalisé pour atteindre le point
   // d'intersection Vector t
