@@ -1,0 +1,40 @@
+{
+  "output_directory": "./render",
+  "image": {
+    "width": 1920,
+    "height": 1080
+  },
+  "shader": "phong",
+  "background": {
+    "color": [0, 0, 0]
+  },
+  "lights": [
+    { "color": [0, 1, 1], "position": [128, 128, 128] },
+    { "color": [1, 1, 0], "position": [-128, -128, 128] },
+    { "color": [1, 0, 1], "position": [-128, 128, 128] }
+  ],
+  "shapes": [
+    {
+      "type": "sphere",
+      "position": [-4, 4, 25],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [1, 1, 0]
+    },
+    {
+      "type": "sphere",
+      "position": [6, -6, 45],
+      "radius": 6,
+      "reflection_type": "mat",
+      "color": [0, 1, 1]
+    },
+    {
+      "type": "sphere",
+      "position": [4, -4, 15],
+      "radius": 4,
+      "reflection_type": "mat",
+      "color": [1, 0, 0]
+    }
+  ],
+  "max_reflections": 3
+}
