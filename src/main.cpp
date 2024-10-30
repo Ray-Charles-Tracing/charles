@@ -86,6 +86,9 @@ int main() {
   Image renderImage = scene.rayCast(3);  // Set max reflections to 3
   camera.Render(renderImage);
 
+  // Export the scene to an OBJ file
+  scene.exportToObj("./render/scene.obj");
+
   // Stop the timer for rendering
   auto end = std::chrono::high_resolution_clock::now();
 
