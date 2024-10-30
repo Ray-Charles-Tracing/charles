@@ -2,10 +2,10 @@
 
 #include "../../include/raymath/Color.hpp"
 
-Color ShaderDiffus::calculateShader(Color pixel,
-                                    std::optional<Vector> intersectionPointOpt,
-                                    Ray ray, const Shape& shape,
-                                    Light light) const {
+Color ShaderDiffus::calculateShader(
+    Color pixel, std::optional<Vector> intersectionPointOpt, Ray ray,
+    const Shape& shape, Light light,
+    const std::vector<std::unique_ptr<Shape>>& objects) const {
   if (intersectionPointOpt.has_value()) {
     // Get bases diffuse values
     Vector intersectionPoint, normal, lightDir, viewDir;

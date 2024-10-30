@@ -12,7 +12,8 @@
 
 class ShaderFlat : public Shader {
  public:
-  Color calculateShader(Color pixel, std::optional<Vector> intersectionPoint,
-                        Ray ray, const Shape& shape,
-                        Light light) const override;
+  Color calculateShader(
+      Color pixel, std::optional<Vector> intersectionPoint, Ray ray,
+      const Shape& shape, Light light,
+      const std::vector<std::unique_ptr<Shape>>& objects) const override;
 };

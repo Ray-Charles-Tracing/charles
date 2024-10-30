@@ -2,7 +2,7 @@
 
 #include <omp.h>
 
-#include <limits>  // Include the limits header for std::numeric_limits
+#include <limits>
 #include <optional>
 
 #include "../../include/raymath/ShaderPhong.hpp"
@@ -35,7 +35,6 @@ void Scene::SetBackground(Color background) { this->background = background; }
 Image Scene::rayCast(int maxReflections) {
   std::cout << "Executing ray casting..." << std::endl;
 
-  // Access class members directly to avoid repetitive method calls
   Image& image = camera.GetImage();
   int width = image.GetWidth();
   int height = image.GetHeight();
@@ -46,11 +45,6 @@ Image Scene::rayCast(int maxReflections) {
   float coordonateXIncrement = 1.0 * aspectRatio / width;
   float coordonateYIncrement = 1.0 / height;
 
-  // Parallelize the nested loops
-  // `#pragma omp parallel for collapse(2)` creates a parallel region and
-  // distributes the iterations of the nested loops among the threads. The
-  // `collapse(2)` clause combines the two loops into a single loop for better
-  // load balancing.
 #pragma omp parallel for collapse(2)
   float coordonateY = 0.5;
   for (int y = 0; y < height; y++) {
@@ -79,9 +73,6 @@ Color Scene::traceRay(const Ray& ray, int depth) {
   Shape* closestShape = nullptr;
 
   for (auto& shape : shapes) {
-    // `std::optional` is used to represent optional values that may or may
-    // not be present. It is used here to handle the case where there is no
-    // intersection point.
     std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
     float distance = intersectPointOpt.has_value()
                          ? (ray.getOrigin() - *intersectPointOpt).getNorm()
@@ -90,20 +81,18 @@ Color Scene::traceRay(const Ray& ray, int depth) {
     if (distance < closestDistance) {
       closestDistance = distance;
       closestIntersectPoint = intersectPointOpt;
-      closestShape = shape.get();  // Get the raw pointer from the unique_ptr
+      closestShape = shape.get();
     }
   }
 
   if (closestShape && closestIntersectPoint.has_value()) {
     Color pixelColor = background;
-    std::shared_ptr<Shader> shader =
-        camera.GetShader();  // Ensure shader is accessible
+    std::shared_ptr<Shader> shader = camera.GetShader();
     for (const auto& light : lights) {
-      pixelColor += shader->calculateShader(pixelColor, closestIntersectPoint,
-                                            ray, *closestShape, light);
+      pixelColor = shader->calculateShader(pixelColor, closestIntersectPoint,
+                                           ray, *closestShape, light, shapes);
     }
 
-    // Handle reflection
     if (closestShape->getReflectionType() == ReflectionType::REFLECTIVE) {
       Vector intersectionPoint = *closestIntersectPoint;
       Vector normal =
@@ -114,7 +103,7 @@ Color Scene::traceRay(const Ray& ray, int depth) {
       Ray reflectionRay(intersectionPoint, reflectionDirection);
 
       Color reflectionColor = traceRay(reflectionRay, depth - 1);
-      pixelColor += reflectionColor * 0.5;  // Adjust reflection intensity
+      pixelColor += reflectionColor * 0.5;
     }
 
     return pixelColor;

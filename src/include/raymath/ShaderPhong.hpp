@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <optional>
+#include <vector>
 
 #include "Color.hpp"
 #include "Light.hpp"
@@ -12,7 +14,8 @@
 
 class ShaderPhong : public Shader {
  public:
-  Color calculateShader(Color pixel, std::optional<Vector> intersectionPoint,
-                        Ray ray, const Shape& shape,
-                        Light light) const override;
+  Color calculateShader(
+      Color pixel, std::optional<Vector> intersectionPoint, Ray ray,
+      const Shape& shape, Light light,
+      const std::vector<std::unique_ptr<Shape>>& objects) const override;
 };

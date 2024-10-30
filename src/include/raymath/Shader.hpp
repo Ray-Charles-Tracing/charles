@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cmath>
+#include <memory>
 #include <optional>
+#include <vector>
 
 #include "Color.hpp"
 #include "Light.hpp"
@@ -17,11 +19,9 @@ class Shader {
       Light light) const {
     Vector shapePos = shape.getPosition();
     Vector cp = intersectionPoint - shapePos;
-    Vector normal = cp.normalize();  // TODO : A calculer dans shape
-    Vector lightDir = (light.getPosition() - intersectionPoint)
-                          .normalize();  // TODO : A calculer dans light
-    Vector viewDir = (ray.getOrigin() - intersectionPoint)
-                         .normalize();  // TODO : A calculer dans Ray
+    Vector normal = cp.normalize();
+    Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
+    Vector viewDir = (ray.getOrigin() - intersectionPoint).normalize();
 
     return std::make_tuple(intersectionPoint, normal, lightDir, viewDir);
   }
@@ -30,23 +30,14 @@ class Shader {
                                              const Shape& shape, Vector viewDir,
                                              Color lightColor,
                                              Light light) const {
-    // Calcul de la réflexion
     Vector reflection =
         (normal * (2 * normal.computeScalable(lightDir)) - lightDir)
             .normalize();
 
-    // Coefficients de réflexion
-    float k_s =
-        shape
-            .getSpecularReflexionCoef();  // Coefficient de réflexion spéculaire
-                                          // shape.getSpecularReflexionCoef
-    float alpha = light.getShiningCoef();  // Exposant pour contrôler la
-                                           // "taille" de la brillance
+    float k_s = shape.getSpecularReflexionCoef();
+    float alpha = light.getShiningCoef();
 
-    // Calcul de l'intensité diffuse
     float diffuseIntensity = std::max(0.0f, normal.computeScalable(lightDir));
-
-    // Calcul de l'intensité spéculaire
     float specularIntensity =
         std::pow(std::max(0.0f, reflection.computeScalable(viewDir)), alpha);
     Color specularColor =
@@ -56,9 +47,9 @@ class Shader {
   }
 
  public:
-  virtual Color calculateShader(Color pixel,
-                                std::optional<Vector> intersectionPoint,
-                                Ray ray, const Shape& shape,
-                                Light light) const = 0;
+  virtual Color calculateShader(
+      Color pixel, std::optional<Vector> intersectionPoint, Ray ray,
+      const Shape& shape, Light light,
+      const std::vector<std::unique_ptr<Shape>>& objects) const = 0;
   virtual ~Shader() = default;
 };

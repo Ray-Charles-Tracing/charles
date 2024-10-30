@@ -4,10 +4,10 @@
 
 #include "../../include/raymath/Color.hpp"
 
-Color ShaderPecular::calculateShader(Color pixel,
-                                     std::optional<Vector> intersectionPointOpt,
-                                     Ray ray, const Shape& shape,
-                                     Light light) const {
+Color ShaderPecular::calculateShader(
+    Color pixel, std::optional<Vector> intersectionPointOpt, Ray ray,
+    const Shape& shape, Light light,
+    const std::vector<std::unique_ptr<Shape>>& objects) const {
   if (intersectionPointOpt.has_value()) {
     Color shapeColor = shape.getColor();
     Color lightColor = light.getColor();
