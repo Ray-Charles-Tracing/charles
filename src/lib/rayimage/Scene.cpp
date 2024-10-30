@@ -82,10 +82,12 @@ Color Scene::traceRay(const Ray& ray, int depth) {
     // `std::optional` is used to represent optional values that may or may
     // not be present. It is used here to handle the case where there is no
     // intersection point.
-    std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
-    float distance = intersectPointOpt.has_value()
-                         ? (ray.getOrigin() - *intersectPointOpt).getNorm()
-                         : std::numeric_limits<float>::max();
+    std::optional<Shape::IntersectionResult> intersectPointOpt =
+        shape->getIntersectPoint(ray);
+    float distance =
+        intersectPointOpt->intersectPoint.has_value()
+            ? (ray.getOrigin() - *intersectPointOpt->intersectPoint).getNorm()
+            : std::numeric_limits<float>::max();
 
     if (distance < closestDistance) {
       closestDistance = distance;

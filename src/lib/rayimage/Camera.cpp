@@ -24,7 +24,7 @@ void Camera::SetShader(std::shared_ptr<Shader> shader) {
 
 void Camera::Render(Image renderImage) {
   std::cout << "Rendering image..." << std::endl;
-  renderImage.WriteFile("./render/cameraRender.png");
+  renderImage.WriteFile("./render/cameraRender2.png");
 }
 
 std::ostream& operator<<(std::ostream& _stream, Camera const& camera) {

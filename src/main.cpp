@@ -22,6 +22,7 @@
 #include <raymath/ShaderPhong.hpp>
 #include <raymath/Shape.hpp>
 #include <raymath/Sphere.hpp>
+#include <raymath/Triangle.hpp>
 #include <raymath/Vector.hpp>
 
 using namespace std;
@@ -55,9 +56,13 @@ int main() {
   shapes.push_back(std::make_unique<Sphere>(
       Vector(-4, 4, 25), 3, ReflectionType::REFLECTIVE, Color(1, 1, 0)));
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
+      Vector(6, -6, 45), 6, ReflectionType::REFLECTIVE, Color(0, 1, 1)));
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0)));
+      Vector(4, -4, 15), 4, ReflectionType::REFLECTIVE, Color(1, 0, 0)));
+  shapes.push_back(std::make_unique<Triangle>(
+      Vector(-15, -5, 20), Vector(-5, -5, 20), Vector(-10, 5, 20),
+      ReflectionType::REFLECTIVE, Color(1, 1, 0)));
+
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
 

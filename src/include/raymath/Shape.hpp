@@ -13,6 +13,10 @@ class Shape : public Material {
   virtual bool isVisible(Ray ray, Vector cameraSphereDirection) const = 0;
 
  public:
+  struct IntersectionResult {
+    Vector intersectPoint;  // Intersection point
+    Vector normal;          // Normal vector at the intersection
+  };
   Shape(Vector position, float scale, Color color,
         ReflectionType reflectionType, float diffuseReflexionCoef,
         float specularReflexionCoef)
@@ -29,8 +33,8 @@ class Shape : public Material {
   Vector getPosition() const { return position; }
 
   float getScale() const { return scale; }
-
-  virtual std::optional<Vector> getIntersectPoint(Ray ray) const = 0;
+  virtual std::optional<IntersectionResult> getIntersectPoint(
+      Ray ray) const = 0;
 
   friend std::ostream& operator<<(std::ostream& _stream, Shape const& shape) {
     _stream << "(Position: " << shape.position << ", Scale: " << shape.scale
