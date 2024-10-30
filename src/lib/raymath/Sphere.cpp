@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 #include <optional>
+#include <sstream>
+#include <vector>
 
 Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
                Color color, MaterialType materialType)
@@ -53,6 +55,28 @@ std::optional<Shape::IntersectionResult> Sphere::getIntersectResult(
 
   return IntersectionResult{realIntersectPoint,
                             normalOnIntersectionPoint.normalize()};
+}
+
+std::string Sphere::toObjData(int& vertexIndex) const {
+  std::stringstream ss;
+  ss << "# Sphere\n";
+  ss << "v " << position.getX() - 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() + 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() << " " << position.getY() - 10 << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() << " " << position.getY() + 10 << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() << " " << position.getY() << " "
+     << position.getZ() - 10 << "\n";
+  ss << "v " << position.getX() << " " << position.getY() << " "
+     << position.getZ() + 10 << "\n";
+  ss << "f " << vertexIndex << " " << vertexIndex + 1 << " " << vertexIndex + 2
+     << " " << vertexIndex + 3 << " " << vertexIndex + 4 << " "
+     << vertexIndex + 5 << "\n";
+  vertexIndex += 6;
+  return ss.str();
 }
 
 bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {

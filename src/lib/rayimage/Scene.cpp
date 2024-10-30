@@ -1,7 +1,10 @@
 #include "../../include/rayimage/Scene.hpp"
 
+#include <fstream>
+#include <iostream>
 #include <limits>  // Include the limits header for std::numeric_limits
 #include <optional>
+#include <vector>
 
 #include "../../include/raymath/ShaderPhong.hpp"
 
@@ -130,6 +133,28 @@ Color Scene::traceRay(const Ray& ray, int depth) {
   }
 
   return background;
+}
+
+void Scene::exportToObj(const std::string& filename) const {
+  if (shapes.empty()) {
+    std::cerr << "No shapes to export." << std::endl;
+    return;
+  }
+
+  std::ofstream file(filename);
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << filename << std::endl;
+    return;
+  }
+
+  int vertexIndex = 1;
+
+  for (const auto& shape : shapes) {
+    file << shape->toObjData(vertexIndex);
+  }
+
+  file.close();
+  std::cout << "Scene exported to " << filename << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& _stream, const Scene& scene) {

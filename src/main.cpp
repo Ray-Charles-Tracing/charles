@@ -54,6 +54,9 @@ int main() {
       scene.rayCast(config.getMaxReflections());  // Set max reflections
   camera.Render(renderImage);
 
+  // Export the scene to an OBJ file
+  scene.exportToObj("./render/scene.obj");
+
   // End the timer for rendering & print the duration
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> duration = end - start;

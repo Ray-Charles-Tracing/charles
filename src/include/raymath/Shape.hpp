@@ -44,6 +44,8 @@ class Shape : public Material {
   virtual std::optional<IntersectionResult> getIntersectResult(
       Ray ray) const = 0;
 
+  virtual std::string toObjData(int& vertexIndex) const = 0;
+
   friend std::ostream& operator<<(std::ostream& _stream, Shape const& shape) {
     _stream << "(Position: " << shape.position << ", Scale: " << shape.scale
             << ")" << ", Material: " << static_cast<Material const&>(shape);

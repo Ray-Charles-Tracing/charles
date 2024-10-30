@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <optional>
+#include <sstream>
 #include <vector>
 
 Plan::Plan(Vector position, Vector normal, ReflectionType reflectionType,
@@ -53,6 +54,18 @@ std::optional<Shape::IntersectionResult> Plan::getIntersectResult(
 
   // Retourner le point d'intersection réel
   return IntersectionResult{realIntersectPoint, normal};
+}
+
+std::string Plan::toObjData(int& vertexIndex) const {
+  std::stringstream ss;
+  ss << "# Plan\n";
+  ss << "v " << position.getX() - 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() + 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() << " " << position.getY() - 10 << " "
+     << position.getZ() << "\n";
+  return ss.str();
 }
 
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {

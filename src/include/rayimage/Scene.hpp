@@ -40,5 +40,7 @@ class Scene {
 
   Color traceRay(const Ray& ray, int depth);
 
+  void exportToObj(const std::string& filename) const;
+
   friend std::ostream& operator<<(std::ostream& _stream, Scene const& scene);
 };
