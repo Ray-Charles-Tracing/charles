@@ -50,13 +50,14 @@ int main() {
                           //   Light(Color(1, 1, 0), Vector(-128, -128, 128)),
                           //   Light(Color(1, 0, 1), Vector(-128, 128, 128)),
                           // Light(Color(1, 1, 1), Vector(0, 45, 0))
-                          Light(Color(1, 1, 1), Vector(0, 45, 0))};
+                          Light(Color(1, 1, 1), Vector(-10, 10, 0)),
+                          Light(Color(1, 1, 1), Vector(10, 10, 0))};
 
   // List of shapes
   std::vector<std::unique_ptr<Shape>> shapes;
-  shapes.push_back(std::make_unique<Plan>(Vector(0, -10, 0), Vector(0, 1, 0),
-                                          ReflectionType::MAT, Color(0, 0, 1),
-                                          MaterialType::METAL));
+  shapes.push_back(std::make_unique<Plan>(
+      Vector(0, -5, 0), Vector(0, 1, 0), ReflectionType::REFLECTIVE,
+      Color(0, 0, 0.5), MaterialType::METAL));
   shapes.push_back(std::make_unique<Sphere>(
       Vector(-15, 0, 20), 3, ReflectionType::REFLECTIVE, Color(0, 1, 1),
       MaterialType::WOOD));
@@ -71,7 +72,7 @@ int main() {
                                Color(0, 1, 1), MaterialType::CERAMIC));
   shapes.push_back(std::make_unique<Triangle>(
       Vector(-15, -5, 20), Vector(-5, -5, 20), Vector(-10, 5, 20),
-      ReflectionType::REFLECTIVE, Color(1, 1, 0), MaterialType::CERAMIC));
+      ReflectionType::MAT, Color(0, 1, 0), MaterialType::PLASTIC));
 
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();

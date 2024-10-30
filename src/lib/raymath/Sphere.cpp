@@ -48,8 +48,8 @@ std::optional<Shape::IntersectionResult> Sphere::getIntersectResult(
   Vector realIntersectPoint =
       theoricIntersectPoint +
       theoricIntersectPointToRealIntersectPointDirection;
-  Vector normalOnIntersectionPoint =
-      centerToTheoricIntersectPointDirection.normalize();
+  Vector centerToRealIntersectionPoint = realIntersectPoint - getPosition();
+  Vector normalOnIntersectionPoint = centerToRealIntersectionPoint.normalize();
 
   return IntersectionResult{realIntersectPoint,
                             normalOnIntersectionPoint.normalize()};
