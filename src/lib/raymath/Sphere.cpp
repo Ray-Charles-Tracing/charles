@@ -67,12 +67,12 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
   // return Vector(0, 0, 0);
 }
 
-bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {
+bool Sphere::isVisible(Ray ray, Vector cameraShapeDirection) const {
   // Calculate length of the direction vector
-  float cameraSphereDirectionNorm = cameraSphereDirection.getNorm();
+  float cameraSphereDirectionNorm = cameraShapeDirection.getNorm();
   // Normalise direction vector
   // ! Verifier normalize
-  Vector cameraSphereDirectionNormalized = cameraSphereDirection.normalize();
+  Vector cameraSphereDirectionNormalized = cameraShapeDirection.normalize();
   // Calculate scalar product between normalised direction vector and
   // normalised ray vector
   float scalarProduct =

@@ -10,7 +10,7 @@ class Shape : public Material {
  protected:
   Vector position;
   float scale;
-  virtual bool isVisible(Ray ray, Vector cameraSphereDirection) const = 0;
+  virtual bool isVisible(Ray ray, Vector cameraShapeDirection) const = 0;
 
  public:
   Shape(Vector position, float scale, Color color,

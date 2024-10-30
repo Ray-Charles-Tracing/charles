@@ -12,7 +12,7 @@
 class Sphere : public Shape {
  private:
   float radius;
-  bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
+  bool isVisible(Ray ray, Vector cameraShapeDirection) const override;
   bool isIntersect(float centerToTheoricIntersectPointLength) const;
 
  public:

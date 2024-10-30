@@ -7,12 +7,18 @@
 
 Plan::Plan(Vector position, Vector normal, ReflectionType reflectionType,
            Color color)
-    : Shape(position, reflectionType, color), normal(normal) {}
+    : Shape(position, color, reflectionType), normal(normal) {}
 
-Plan::Plan(Vector position, ReflectionType reflectionType, Color color)
-    : Shape(position, reflectionType, color), normal(Vector(0, 1, 0)) {}
+Plan::Plan(Vector position, float scale, Vector normal,
+           ReflectionType reflectionType, Color color,
+           float diffuseReflexionCoef, float specularReflexionCoef)
+    : Shape(position, scale, color, reflectionType, diffuseReflexionCoef,
+            specularReflexionCoef),
+      normal(normal) {}
 
-bool Plan::isVisible(Ray ray, Vector cameraPlanDirection) const { return true; }
+bool Plan::isVisible(Ray ray, Vector cameraShapeDirection) const {
+  return true;
+}
 
 bool Plan::isIntersect(float centerToTheoricIntersectPointLength) const {
   // TODOREVIEW SA : Vérifier si le plan est bien intersecté
@@ -50,8 +56,7 @@ std::optional<Vector> Plan::getIntersectPoint(Ray ray) const {
 }
 
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {
-  _stream << "Plan(Position: " << plan.position << ", Normal: " << plan.normal
-          << ", ReflectionType: " << plan.reflectionType
-          << ", Color: " << plan.color << ")";
+  _stream << "Shape: " << static_cast<Shape const&>(plan)
+          << ", Normal: " << plan.normal;
   return _stream;
 }
