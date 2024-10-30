@@ -4,6 +4,7 @@
 #include <optional>
 
 #include "Color.hpp"
+#include "MaterialType.hpp"
 #include "Ray.hpp"
 #include "ReflectionType.hpp"
 #include "Shape.hpp"
@@ -19,10 +20,10 @@ class Triangle : public Shape {
 
  public:
   Triangle(Vector a, Vector b, Vector c, ReflectionType reflectionType,
-           Color color);
+           Color color, MaterialType materialType);
   Triangle(Vector a, Vector b, Vector c, float scale,
            ReflectionType reflectionType, Color color,
-           float diffuseReflexionCoef, float specularReflexionCoef);
+           MaterialType materialType);
   ~Triangle() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;

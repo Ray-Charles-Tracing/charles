@@ -13,6 +13,8 @@
 #include <rayimage/Scene.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
+#include <raymath/MaterialType.hpp>
+#include <raymath/Plan.hpp>
 #include <raymath/Ray.hpp>
 #include <raymath/ReflectionType.hpp>
 #include <raymath/Shader.hpp>
@@ -44,24 +46,32 @@ int main() {
 
   // Create light sources
   // vector<Light> lights = {Light(Color(1, 1, 1), Vector(0, 0, 0))};
-  vector<Light> lights = {
-      Light(Color(0, 1, 1), Vector(128, 128, 128)),
-      Light(Color(1, 1, 0), Vector(-128, -128, 128)),
-      Light(Color(1, 0, 1), Vector(-128, 128, 128)),
-      // Light(Color(1, 1, 1), Vector(0, 45, 0))
-  };
+  vector<Light> lights = {//   Light(Color(0, 1, 1), Vector(128, 128, 128)),
+                          //   Light(Color(1, 1, 0), Vector(-128, -128, 128)),
+                          //   Light(Color(1, 0, 1), Vector(-128, 128, 128)),
+                          // Light(Color(1, 1, 1), Vector(0, 45, 0))
+                          Light(Color(1, 1, 1), Vector(0, 45, 0))};
 
   // List of shapes
   std::vector<std::unique_ptr<Shape>> shapes;
+  shapes.push_back(std::make_unique<Plan>(Vector(0, -10, 0), Vector(0, 1, 0),
+                                          ReflectionType::MAT, Color(0, 0, 1),
+                                          MaterialType::METAL));
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(-4, 4, 25), 3, ReflectionType::REFLECTIVE, Color(1, 1, 0)));
-  shapes.push_back(std::make_unique<Sphere>(
-      Vector(6, -6, 45), 6, ReflectionType::REFLECTIVE, Color(0, 1, 1)));
-  shapes.push_back(std::make_unique<Sphere>(
-      Vector(4, -4, 15), 4, ReflectionType::REFLECTIVE, Color(1, 0, 0)));
+      Vector(-15, 0, 20), 3, ReflectionType::REFLECTIVE, Color(0, 1, 1),
+      MaterialType::WOOD));
+  shapes.push_back(
+      std::make_unique<Sphere>(Vector(-5, 0, 20), 3, ReflectionType::REFLECTIVE,
+                               Color(0, 1, 1), MaterialType::PLASTIC));
+  shapes.push_back(
+      std::make_unique<Sphere>(Vector(5, 0, 20), 3, ReflectionType::REFLECTIVE,
+                               Color(0, 1, 1), MaterialType::METAL));
+  shapes.push_back(
+      std::make_unique<Sphere>(Vector(15, 0, 20), 3, ReflectionType::REFLECTIVE,
+                               Color(0, 1, 1), MaterialType::CERAMIC));
   shapes.push_back(std::make_unique<Triangle>(
       Vector(-15, -5, 20), Vector(-5, -5, 20), Vector(-10, 5, 20),
-      ReflectionType::REFLECTIVE, Color(1, 1, 0)));
+      ReflectionType::REFLECTIVE, Color(1, 1, 0), MaterialType::CERAMIC));
 
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();

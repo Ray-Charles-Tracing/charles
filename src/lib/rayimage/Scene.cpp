@@ -1,7 +1,5 @@
 #include "../../include/rayimage/Scene.hpp"
 
-#include <omp.h>
-
 #include <limits>  // Include the limits header for std::numeric_limits
 #include <optional>
 

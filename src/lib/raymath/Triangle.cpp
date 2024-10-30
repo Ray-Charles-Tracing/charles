@@ -4,14 +4,16 @@
 #include <iostream>
 
 Triangle::Triangle(Vector a, Vector b, Vector c, ReflectionType reflectionType,
-                   Color color)
-    : Shape((a + b + c) / 3.0, color, reflectionType), a(a), b(b), c(c) {}
+                   Color color, MaterialType materialType)
+    : Shape((a + b + c) / 3.0, color, reflectionType, materialType),
+      a(a),
+      b(b),
+      c(c) {}
 
 Triangle::Triangle(Vector a, Vector b, Vector c, float scale,
                    ReflectionType reflectionType, Color color,
-                   float diffuseReflexionCoef, float specularReflexionCoef)
-    : Shape((a + b + c) / 3, scale, color, reflectionType, diffuseReflexionCoef,
-            specularReflexionCoef),
+                   MaterialType materialType)
+    : Shape((a + b + c) / 3, scale, color, reflectionType, materialType),
       a(a),
       b(b),
       c(c) {}
