@@ -3,6 +3,12 @@
 #include <iostream>
 #include <optional>
 
+#include "Color.hpp"
+#include "Ray.hpp"
+#include "ReflectionType.hpp"
+#include "Shape.hpp"
+#include "Vector.hpp"
+
 class Plan : public Shape {
  private:
   Vector normal;
