@@ -1,0 +1,9 @@
+# Renders
+render/
+
+# Lib objects
+*.O
+*.a
+
+# Compiled source
+*.DS_Store

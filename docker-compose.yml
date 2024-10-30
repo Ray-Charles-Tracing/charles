@@ -1,0 +1,9 @@
+services:
+  cpp_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./render:/app/render
+      - ./src:/app/src
+    command: ["sh", "-c", "/usr/bin/time -f 'Global elapsed time: %E' ./main"]
