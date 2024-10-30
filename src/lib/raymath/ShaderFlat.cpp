@@ -6,7 +6,7 @@ Color ShaderFlat::calculateShader(Color pixel,
                                   Light light) const {
   if (intersectionPoint.has_value()) {
     Color newPixel = pixel;
-    return pixel + sphere.getColor();
+    return pixel + shape.getColor();
   }
   return pixel;
 }

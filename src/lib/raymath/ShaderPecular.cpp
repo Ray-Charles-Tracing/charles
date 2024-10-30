@@ -17,22 +17,23 @@ Color ShaderPecular::calculateShader(Color pixel,
     Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
     Vector viewDir = (ray.getOrigin() - intersectionPoint).normalize();
 
-    // Calcul de la réflexion
+    // Calcul de la réflexion //! Base
     Vector reflection =
         (normal * (2 * normal.computeScalable(lightDir)) - lightDir)
             .normalize();
 
     // Coefficient de réflexion spéculaire et exposant
-    float k_s = 0.5f;
-    float alpha = 32.0f;
+    float k_s = 0.5f;     // Materials
+    float alpha = 32.0f;  // lumière
 
     // Calcul de l'intensité spéculaire
     float specularIntensity =
         std::pow(std::max(0.0f, reflection.computeScalable(viewDir)),
-                 alpha);  // Intensité du reflet produit
+                 alpha);  // Intensité du reflet produit // ! Base
 
     // Calcul de la couleur spéculaire
-    Color specularColor = Color(1.0f, 1.0f, 1.0f) * k_s * specularIntensity;
+    Color specularColor =
+        Color(1.0f, 1.0f, 1.0f) * k_s * specularIntensity;  //! Base
 
     // Couleur diffuse
     Color shapeColor = shape.getColor();

@@ -7,13 +7,16 @@ Color ShaderPhong::calculateShader(Color pixel,
                                    Ray ray, const Shape& shape,
                                    Light light) const {
   if (intersectionPointOpt.has_value()) {
-    Vector intersectionPoint = *intersectionPointOpt;
-    Vector shapePos = shape.getPosition();
-    Vector cp = intersectionPoint - shapePos;
-    Vector normal = cp.normalize();
+    // Vector intersectionPoint = *intersectionPointOpt;
+    // Vector shapePos = shape.getPosition();
+    // Vector cp = intersectionPoint - shapePos;
+    // Vector normal = cp.normalize();
 
-    Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
-    Vector viewDir = (ray.getOrigin() - intersectionPoint).normalize();
+    // Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
+    // Vector viewDir = (ray.getOrigin() - intersectionPoint).normalize();
+    Vector intersectionPoint, normal, lightDir, viewDir;
+    std::tie(intersectionPoint, normal, lightDir, viewDir) =
+        this->getDiffuseBased(*intersectionPointOpt, ray, shape, light);
 
     // Calcul de la réflexion
     Vector reflection =

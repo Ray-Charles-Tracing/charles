@@ -45,6 +45,8 @@ int main() {
       Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
   shapes.push_back(std::make_unique<Sphere>(
       Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(2, -7, 10), 2, ReflectionType::MAT, Color(1, 0, 1)));
 
   ShaderPhong shaderPhong;
 
