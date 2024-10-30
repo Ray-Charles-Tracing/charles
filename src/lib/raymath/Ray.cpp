@@ -7,5 +7,5 @@ Ray::Ray(Vector iVectorOrigin, Vector iVectorDirection)
 
 Ray::~Ray() {}
 
-Vector Ray::getOrigin() { return origin; }
-Vector Ray::getDirection() { return direction; }
+Vector Ray::getOrigin() const { return origin; }
+Vector Ray::getDirection() const { return direction; }

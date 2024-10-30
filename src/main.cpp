@@ -31,32 +31,26 @@ int main() {
 
   // Initialize colors
   Color red(1, 0, 0);
+  Color green(0, 1, 0);
+  Color blue(0, 0, 1);
   Color black;
 
   // Create an image in memory
-  int width = 1920;
-  int height = 1920;
+  int width = 800;
+  int height = 800;
   Image image(width, height);
 
   // Create light sources
-  vector<Light> lights = {
-      Light(Color(0, 1, 1), Vector(128, 128, 128)),
-      Light(Color(1, 1, 0), Vector(-128, -128, 128)),
-      Light(Color(1, 0, 1), Vector(-128, 128, 128)),
-      // Light(Color(1, 1, 1), Vector(0, 45, 0))
-  };
+  vector<Light> lights = {Light(Color(1, 1, 1), Vector(0, 0, 0))};
 
-  // Liste des sphères
+  // List of shapes
   std::vector<std::unique_ptr<Shape>> shapes;
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)));
+      Vector(0, 0, 20), 5, ReflectionType::REFLECTIVE, Color(1, 1, 0)));
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
+      Vector(14, 0, 20), 5, ReflectionType::REFLECTIVE, Color(0, 1, 1)));
   shapes.push_back(std::make_unique<Sphere>(
-      Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0)));
-  shapes.push_back(std::make_unique<Sphere>(
-      Vector(2, -7, 10), 2, ReflectionType::MAT, Color(1, 0, 1)));
-
+      Vector(-14, 0, 20), 5, ReflectionType::REFLECTIVE, Color(1, 0, 0)));
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
 
@@ -68,7 +62,7 @@ int main() {
               std::move(shapes));
 
   // Execute raycasting and render the image
-  Image renderImage = scene.rayCast();
+  Image renderImage = scene.rayCast(3);  // Set max reflections to 3
   camera.Render(renderImage);
 
   return 0;
