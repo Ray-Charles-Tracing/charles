@@ -7,13 +7,10 @@ Color ShaderDiffus::calculateShader(Color pixel,
                                     Ray ray, const Shape& shape,
                                     Light light) const {
   if (intersectionPointOpt.has_value()) {
-    Vector intersectionPoint = *intersectionPointOpt;
-    Vector vecteur = shape.getPosition();
-    Vector cp = intersectionPoint - vecteur;
-    Vector normal = cp.normalize();
-
-    Vector pl = light.getPosition() - intersectionPoint;
-    Vector lightDir = pl.normalize();
+    // Get bases diffuse values
+    Vector intersectionPoint, normal, lightDir, viewDir;
+    std::tie(intersectionPoint, normal, lightDir, viewDir) =
+        this->getDiffuseBases(*intersectionPointOpt, ray, shape, light);
 
     float intensity = normal.computeScalable(lightDir);
 

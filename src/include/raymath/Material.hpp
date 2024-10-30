@@ -13,23 +13,13 @@ class Material {
   float specularReflexionCoef;
 
  public:
-  Material(ReflectionType reflectionType, Color color,
-           float diffuseReflexionCoef, float specularReflexionCoef)
+  Material(ReflectionType reflectionType = ReflectionType::MAT,
+           Color color = Color(1, 1, 1), float diffuseReflexionCoef = 0.5f,
+           float specularReflexionCoef = 0.8f)
       : reflectionType(reflectionType),
         color(color),
         diffuseReflexionCoef(diffuseReflexionCoef),
         specularReflexionCoef(specularReflexionCoef) {}
-  Material() {
-    reflectionType = ReflectionType::MAT;
-    color = Color(1, 1, 1);
-    diffuseReflexionCoef = 0.5f;
-    specularReflexionCoef = 0.8f;
-  }
-  Material(ReflectionType reflectionType, Color color)
-      : reflectionType(reflectionType), color(color) {
-    diffuseReflexionCoef = 0.5f;
-    specularReflexionCoef = 0.8f;
-  }
   virtual ~Material() = default;
 
   ReflectionType getReflectionType() const { return reflectionType; }

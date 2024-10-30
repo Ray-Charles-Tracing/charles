@@ -9,35 +9,19 @@ Color ShaderPecular::calculateShader(Color pixel,
                                      Ray ray, const Shape& shape,
                                      Light light) const {
   if (intersectionPointOpt.has_value()) {
-    Vector intersectionPoint = *intersectionPointOpt;
-    Vector shapePos = shape.getPosition();
-    Vector cp = intersectionPoint - shapePos;
-    Vector normal = cp.normalize();
-
-    Vector lightDir = (light.getPosition() - intersectionPoint).normalize();
-    Vector viewDir = (ray.getOrigin() - intersectionPoint).normalize();
-
-    // Calcul de la réflexion //! Base
-    Vector reflection =
-        (normal * (2 * normal.computeScalable(lightDir)) - lightDir)
-            .normalize();
-
-    // Coefficient de réflexion spéculaire et exposant
-    float k_s = 0.5f;     // Materials
-    float alpha = 32.0f;  // lumière
-
-    // Calcul de l'intensité spéculaire
-    float specularIntensity =
-        std::pow(std::max(0.0f, reflection.computeScalable(viewDir)),
-                 alpha);  // Intensité du reflet produit // ! Base
-
-    // Calcul de la couleur spéculaire
-    Color specularColor =
-        Color(1.0f, 1.0f, 1.0f) * k_s * specularIntensity;  //! Base
-
-    // Couleur diffuse
     Color shapeColor = shape.getColor();
-    float diffuseIntensity = std::max(0.0f, normal.computeScalable(lightDir));
+    Color lightColor = light.getColor();
+
+    // Get bases diffuse values
+    Vector intersectionPoint, normal, lightDir, viewDir;
+    std::tie(intersectionPoint, normal, lightDir, viewDir) =
+        this->getDiffuseBases(*intersectionPointOpt, ray, shape, light);
+
+    // Get bases diffuse values
+    float diffuseIntensity;
+    Color specularColor;
+    std::tie(diffuseIntensity, specularColor) = this->getSpeculareBases(
+        lightDir, normal, shape, viewDir, lightColor, light);
     Color diffuseColor = shapeColor * diffuseIntensity;
 
     // Ajout des couleurs diffuse et spéculaire
