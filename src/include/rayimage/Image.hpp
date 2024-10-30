@@ -19,5 +19,8 @@ class Image {
   void SetPixel(unsigned int x, unsigned int y, Color color);
   Color GetPixel(unsigned int x, unsigned int y);
 
+  unsigned int GetWidth() const { return width; }
+  unsigned int GetHeight() const { return height; }
+
   void WriteFile(const char* filename);
 };
