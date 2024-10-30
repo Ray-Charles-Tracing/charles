@@ -24,10 +24,24 @@ Color ShaderPhong::calculateShader(Color pixel,
             .normalize();
 
     // Coefficients de réflexion
-    float k_d = 0.5f;  // Coefficient de réflexion diffuse // Material
-    float k_s = 0.8f;  // Coefficient de réflexion spéculaire // Material
+    // float k_d = 0.5f;     // Coefficient de réflexion diffuse // Material
+    //                       // shape.getDiffusReflexionCoef
+    // float k_s = 0.8f;     // Coefficient de réflexion spéculaire // Material
+    //                       // shape.getSpecularReflexionCoef
+    // float alpha = 32.0f;  // Exposant pour contrôler la "taille" de la
+    // brillance
+    float k_d =
+        shape.getDiffuseReflexionCoef();  // Coefficient de réflexion diffuse //
+                                          // Material
+                                          // shape.getDiffusReflexionCoef
+    float k_s =
+        shape
+            .getSpecularReflexionCoef();  // Coefficient de réflexion spéculaire
+                                          // // Material
+                                          // shape.getSpecularReflexionCoef
     float alpha =
-        32.0f;  // Exposant pour contrôler la "taille" de la brillance // Light
+        light.getShiningCoef();  // Exposant pour contrôler la "taille" de la
+                                 // brillance Light light.getShiningCoef
 
     // Calcul de l'intensité diffuse
     float diffuseIntensity = std::max(0.0f, normal.computeScalable(lightDir));

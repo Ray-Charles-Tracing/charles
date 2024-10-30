@@ -9,8 +9,11 @@ Sphere::Sphere(Vector position, float radius, ReflectionType reflectionType,
     : Shape(position, color, reflectionType), radius(radius) {}
 
 Sphere::Sphere(Vector position, float scale, float radius,
-               ReflectionType reflectionType, Color color)
-    : Shape(position, scale, color, reflectionType), radius(radius) {}
+               ReflectionType reflectionType, Color color,
+               float diffuseReflexionCoef, float specularReflexionCoef)
+    : Shape(position, scale, color, reflectionType, diffuseReflexionCoef,
+            specularReflexionCoef),
+      radius(radius) {}
 
 std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
   // Calculate direction vector between camera origin and sphere center

@@ -19,7 +19,8 @@ class Sphere : public Shape {
   Sphere(Vector position, float radius, ReflectionType reflectionType,
          Color color);
   Sphere(Vector position, float scale, float radius,
-         ReflectionType reflectionType, Color color);
+         ReflectionType reflectionType, Color color, float diffuseReflexionCoef,
+         float specularReflexionCoef);
   ~Sphere() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;

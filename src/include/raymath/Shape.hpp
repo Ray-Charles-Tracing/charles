@@ -14,8 +14,12 @@ class Shape : public Material {
 
  public:
   Shape(Vector position, float scale, Color color,
-        ReflectionType reflectionType)
-      : position(position), scale(scale), Material(reflectionType, color) {}
+        ReflectionType reflectionType, float diffuseReflexionCoef,
+        float specularReflexionCoef)
+      : position(position),
+        scale(scale),
+        Material(reflectionType, color, diffuseReflexionCoef,
+                 specularReflexionCoef) {}
   Shape(Vector position, Color color, ReflectionType reflectionType)
       : position(position), Material(reflectionType, color) {
     scale = 1;
