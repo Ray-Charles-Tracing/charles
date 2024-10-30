@@ -1,5 +1,7 @@
 #include "../../include/rayimage/Scene.hpp"
 
+#include <omp.h>
+
 #include <limits>  // Include the limits header for std::numeric_limits
 #include <optional>
 
@@ -30,7 +32,7 @@ void Scene::SetLights(std::vector<Light> lights) {
 Color Scene::GetBackground() const { return background; }
 void Scene::SetBackground(Color background) { this->background = background; }
 
-Image Scene::rayCast() {
+Image Scene::rayCast(int maxReflections) {
   std::cout << "Executing ray casting..." << std::endl;
 
   // Access class members directly to avoid repetitive method calls
@@ -56,38 +58,7 @@ Image Scene::rayCast() {
       float coordonateY = 1.0 - y * coordonateYIncrement;
 
       Ray ray(cameraPosition, Vector(coordonateX, coordonateY, 1));
-      Color pixelColor = background;
-
-      float closestDistance = std::numeric_limits<float>::max();
-      std::optional<Vector> closestIntersectPoint;
-      Shape* closestShape = nullptr;
-
-      for (auto& shape : shapes) {
-        // `std::optional` is used to represent optional values that may or may
-        // not be present. It is used here to handle the case where there is no
-        // intersection point.
-        std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
-        float distance = intersectPointOpt.has_value()
-                             ? (ray.getOrigin() - *intersectPointOpt).getNorm()
-                             : std::numeric_limits<float>::max();
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIntersectPoint = intersectPointOpt;
-          closestShape =
-              shape.get();  // Get the raw pointer from the unique_ptr
-        }
-      }
-
-      if (closestShape) {
-        // Ensure the closestShape is of type Shape before casting
-        if (closestIntersectPoint.has_value()) {
-          for (const auto& light : lights) {
-            pixelColor += shader->calculateShader(
-                pixelColor, closestIntersectPoint, ray, *closestShape, light);
-          }
-        }
-      }
+      Color pixelColor = traceRay(ray, maxReflections);
 
       image.SetPixel(x, y, pixelColor);
     }
@@ -95,6 +66,60 @@ Image Scene::rayCast() {
 
   std::cout << "Ray casting completed." << std::endl;
   return image;
+}
+
+Color Scene::traceRay(const Ray& ray, int depth) {
+  if (depth <= 0) {
+    return background;
+  }
+
+  float closestDistance = std::numeric_limits<float>::max();
+  std::optional<Vector> closestIntersectPoint;
+  Shape* closestShape = nullptr;
+
+  for (auto& shape : shapes) {
+    // `std::optional` is used to represent optional values that may or may
+    // not be present. It is used here to handle the case where there is no
+    // intersection point.
+    std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
+    float distance = intersectPointOpt.has_value()
+                         ? (ray.getOrigin() - *intersectPointOpt).getNorm()
+                         : std::numeric_limits<float>::max();
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestIntersectPoint = intersectPointOpt;
+      closestShape = shape.get();  // Get the raw pointer from the unique_ptr
+    }
+  }
+
+  if (closestShape && closestIntersectPoint.has_value()) {
+    Color pixelColor = background;
+    std::shared_ptr<Shader> shader =
+        camera.GetShader();  // Ensure shader is accessible
+    for (const auto& light : lights) {
+      pixelColor += shader->calculateShader(pixelColor, closestIntersectPoint,
+                                            ray, *closestShape, light);
+    }
+
+    // Handle reflection
+    if (closestShape->getReflectionType() == ReflectionType::REFLECTIVE) {
+      Vector intersectionPoint = *closestIntersectPoint;
+      Vector normal =
+          (intersectionPoint - closestShape->getPosition()).normalize();
+      Vector reflectionDirection =
+          ray.getDirection() -
+          normal * 2 * ray.getDirection().computeScalable(normal);
+      Ray reflectionRay(intersectionPoint, reflectionDirection);
+
+      Color reflectionColor = traceRay(reflectionRay, depth - 1);
+      pixelColor += reflectionColor * 0.5;  // Adjust reflection intensity
+    }
+
+    return pixelColor;
+  }
+
+  return background;
 }
 
 std::ostream& operator<<(std::ostream& _stream, const Scene& scene) {
