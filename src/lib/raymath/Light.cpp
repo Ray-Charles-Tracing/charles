@@ -1,15 +1,22 @@
 #include "../../include/raymath/Light.hpp"
 
-Light::Light() : color(Color()), position(Vector()) {}
+Light::Light() : color(Color()), position(Vector()) { shiningCoef = 32.0f; }
+
+Light::Light(Color const& color, Vector const& position, float shiningCoef)
+    : color(color), position(position), shiningCoef(shiningCoef) {}
 
 Light::Light(Color const& color, Vector const& position)
-    : color(color), position(position) {}
+    : color(color), position(position) {
+  shiningCoef = 32.0f;
+}
 
 Light::~Light() {}
 
 Color Light::getColor() const { return color; }
 
 Vector Light::getPosition() const { return position; }
+
+float Light::getShiningCoef() const { return shiningCoef; }
 
 void Light::setColor(Color const& color) { this->color = color; }
 

@@ -46,11 +46,16 @@ int main() {
       // Light(Color(1, 1, 1), Vector(0, 45, 0))
   };
 
-  // List of spheres
-  vector<Sphere> spheres = {
-      Sphere(Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)),
-      Sphere(Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)),
-      Sphere(Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0))};
+  // Liste des sphères
+  std::vector<std::unique_ptr<Shape>> shapes;
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(-4, 4, 25), 3, ReflectionType::MAT, Color(1, 1, 0)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(6, -6, 45), 6, ReflectionType::MAT, Color(0, 1, 1)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(4, -4, 15), 4, ReflectionType::MAT, Color(1, 0, 0)));
+  shapes.push_back(std::make_unique<Sphere>(
+      Vector(2, -7, 10), 2, ReflectionType::MAT, Color(1, 0, 1)));
 
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
@@ -60,7 +65,7 @@ int main() {
 
   // Initialize the scene
   Scene scene(Vector(0, 0, 0), camera, std::move(lights), black,
-              std::move(spheres));
+              std::move(shapes));
 
   // Execute raycasting and render the image
   Image renderImage = scene.rayCast();

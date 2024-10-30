@@ -2,11 +2,11 @@
 
 Color ShaderFlat::calculateShader(Color pixel,
                                   std::optional<Vector> intersectionPoint,
-                                  Ray ray, Sphere sphere, Light light) const {
+                                  Ray ray, const Shape& shape,
+                                  Light light) const {
   if (intersectionPoint.has_value()) {
-    Color newPixel = pixel + sphere.getColor();
-    // std::cout << "Calculating shader: " << newPixel << std::endl;
-    return newPixel;
+    Color newPixel = pixel;
+    return pixel + shape.getColor();
   }
   return pixel;
 }

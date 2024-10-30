@@ -1,7 +1,5 @@
 #include "../../include/rayimage/Scene.hpp"
 
-#include <omp.h>
-
 #include <limits>  // Include the limits header for std::numeric_limits
 #include <optional>
 
@@ -9,12 +7,12 @@
 
 Scene::Scene(Vector const& origin, Camera const& camera,
              std::vector<Light> lights, Color const& background,
-             std::vector<Sphere> spheres)
+             std::vector<std::unique_ptr<Shape>>&& shapes)
     : origin(origin),
       camera(camera),
       lights(std::move(lights)),
       background(background),
-      spheres(std::move(spheres)) {}
+      shapes(std::move(shapes)) {}
 
 Scene::~Scene() {}
 
@@ -62,13 +60,13 @@ Image Scene::rayCast() {
 
       float closestDistance = std::numeric_limits<float>::max();
       std::optional<Vector> closestIntersectPoint;
-      Sphere* closestSphere = nullptr;
+      Shape* closestShape = nullptr;
 
-      for (auto& sphere : spheres) {
+      for (auto& shape : shapes) {
         // `std::optional` is used to represent optional values that may or may
         // not be present. It is used here to handle the case where there is no
         // intersection point.
-        std::optional<Vector> intersectPointOpt = sphere.getIntersectPoint(ray);
+        std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
         float distance = intersectPointOpt.has_value()
                              ? (ray.getOrigin() - *intersectPointOpt).getNorm()
                              : std::numeric_limits<float>::max();
@@ -76,16 +74,17 @@ Image Scene::rayCast() {
         if (distance < closestDistance) {
           closestDistance = distance;
           closestIntersectPoint = intersectPointOpt;
-          closestSphere = &sphere;  // Get the raw pointer from the unique_ptr
+          closestShape =
+              shape.get();  // Get the raw pointer from the unique_ptr
         }
       }
 
-      if (closestSphere) {
-        // Ensure the closestSphere is of type Sphere before casting
+      if (closestShape) {
+        // Ensure the closestShape is of type Shape before casting
         if (closestIntersectPoint.has_value()) {
           for (const auto& light : lights) {
             pixelColor += shader->calculateShader(
-                pixelColor, closestIntersectPoint, ray, *closestSphere, light);
+                pixelColor, closestIntersectPoint, ray, *closestShape, light);
           }
         }
       }

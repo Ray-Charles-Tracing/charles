@@ -1,13 +1,14 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "../../include/rayimage/Camera.hpp"
 #include "../../include/rayimage/Image.hpp"
 #include "../../include/raymath/Color.hpp"
 #include "../../include/raymath/Light.hpp"
-#include "../../include/raymath/Sphere.hpp"
+#include "../../include/raymath/Shape.hpp"
 #include "../../include/raymath/Vector.hpp"
 
 class Scene {
@@ -16,11 +17,11 @@ class Scene {
   Camera camera;
   std::vector<Light> lights;
   Color background;
-  std::vector<Sphere> spheres;
+  std::vector<std::unique_ptr<Shape>>&& shapes;
 
  public:
   Scene(Vector const& origin, Camera const& camera, std::vector<Light> lights,
-        Color const& background, std::vector<Sphere> spheres);
+        Color const& background, std::vector<std::unique_ptr<Shape>>&& shapes);
   ~Scene();
 
   Vector GetOrigin() const;

@@ -4,23 +4,23 @@
 #include <optional>
 
 #include "Color.hpp"
-#include "Material.hpp"
 #include "Ray.hpp"
 #include "ReflectionType.hpp"
 #include "Shape.hpp"
 #include "Vector.hpp"
 
-class Sphere : public Shape, public Material {
+class Sphere : public Shape {
  private:
   float radius;
   bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
-  bool isIntersect(float centerToTheoricIntersectPointLength) const override;
+  bool isIntersect(float centerToTheoricIntersectPointLength) const;
 
  public:
   Sphere(Vector position, float radius, ReflectionType reflectionType,
          Color color);
   Sphere(Vector position, float scale, float radius,
-         ReflectionType reflectionType, Color color);
+         ReflectionType reflectionType, Color color, float diffuseReflexionCoef,
+         float specularReflexionCoef);
   ~Sphere() override = default;
 
   std::optional<Vector> getIntersectPoint(Ray ray) const override;
