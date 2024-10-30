@@ -10,10 +10,8 @@ Color ShaderPhong::calculateShader(Color pixel,
     Color shapeColor = shape.getColor();
     Color lightColor = light.getColor();
 
-    // Reflexion coef
-    float k_d =
-        shape.getDiffuseReflexionCoef();  // Coefficient de réflexion diffuse
-                                          // shape.getDiffusReflexionCoef
+    // Coefficient de réflexion diffuse
+    float k_d = shape.getDiffuseReflexionCoef();
 
     // Get bases diffuse values
     Vector intersectionPoint, normal, lightDir, viewDir;
@@ -25,6 +23,18 @@ Color ShaderPhong::calculateShader(Color pixel,
     Color specularColor;
     std::tie(diffuseIntensity, specularColor) = this->getSpeculareBases(
         lightDir, normal, shape, viewDir, lightColor, light);
+
+    // Obtenir la rugosité
+    float roughness = shape.getRoughness();
+
+    // Ajuster l'intensité spéculaire en fonction de la rugosité
+    float adjustedSpecularIntensity =
+        specularColor.R();  // Utilisation du getter
+    for (int i = 0; i < static_cast<int>(roughness * 10); ++i) {
+      adjustedSpecularIntensity *= specularColor.R();  // Utilisation du getter
+    }
+    specularColor = Color(1.0f, 1.0f, 1.0f) * shape.getSpecularReflexionCoef() *
+                    adjustedSpecularIntensity;
 
     // Calculate diffuse color
     Color diffuseColor = shapeColor * k_d * diffuseIntensity * lightColor;

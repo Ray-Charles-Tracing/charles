@@ -4,26 +4,33 @@
 #include <optional>
 
 #include "Material.hpp"
+#include "MaterialType.hpp"  // Include the MaterialType header
 #include "Vector.hpp"
 
 class Shape : public Material {
  protected:
   Vector position;
+  MaterialType materialType;
   float scale;
   virtual bool isVisible(Ray ray, Vector cameraSphereDirection) const = 0;
 
  public:
   Shape(Vector position, float scale, Color color,
-        ReflectionType reflectionType, float diffuseReflexionCoef,
-        float specularReflexionCoef)
+        ReflectionType reflectionType,
+        MaterialType materialType)  // Change here
       : position(position),
         scale(scale),
-        Material(reflectionType, color, diffuseReflexionCoef,
-                 specularReflexionCoef) {}
-  Shape(Vector position, Color color, ReflectionType reflectionType)
-      : position(position), Material(reflectionType, color) {
+        materialType(materialType),
+        Material(reflectionType, color, materialType) {}  // Pass materialType
+
+  Shape(Vector position, Color color, ReflectionType reflectionType,
+        MaterialType materialType)  // Change here
+      : position(position),
+        materialType(materialType),
+        Material(reflectionType, color, materialType) {  // Pass materialType
     scale = 1;
   }
+
   virtual ~Shape() = default;
 
   Vector getPosition() const { return position; }
