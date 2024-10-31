@@ -16,7 +16,7 @@ class Triangle : public Shape {
   Vector b;
   Vector c;
   bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
-  bool isIntersect(float centerToTheoricIntersectPointLength) const;
+  bool isIntersect(Vector intersection, Vector a, Vector b, Vector c) const;
 
  public:
   Triangle(Vector a, Vector b, Vector c, ReflectionType reflectionType,

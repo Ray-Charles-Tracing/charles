@@ -57,7 +57,7 @@ int main() {
   std::vector<std::unique_ptr<Shape>> shapes;
   shapes.push_back(std::make_unique<Plan>(
       Vector(0, -5, 0), Vector(0, 1, 0), ReflectionType::REFLECTIVE,
-      Color(0, 0, 0.5), MaterialType::METAL));
+      Color(0.7, 0.7, 0.7), MaterialType::METAL));
   shapes.push_back(std::make_unique<Sphere>(
       Vector(-15, 0, 20), 3, ReflectionType::REFLECTIVE, Color(0, 1, 1),
       MaterialType::WOOD));
@@ -71,8 +71,8 @@ int main() {
       std::make_unique<Sphere>(Vector(15, 0, 20), 3, ReflectionType::REFLECTIVE,
                                Color(0, 1, 1), MaterialType::CERAMIC));
   shapes.push_back(std::make_unique<Triangle>(
-      Vector(-15, -5, 20), Vector(-5, -5, 20), Vector(-10, 5, 20),
-      ReflectionType::MAT, Color(0, 1, 0), MaterialType::PLASTIC));
+      Vector(-15, -4, 25), Vector(0, 15, 25), Vector(15, -4, 25),
+      ReflectionType::REFLECTIVE, Color(0, 0, 1), MaterialType::METAL));
 
   // Create a shared pointer to the shader
   std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
