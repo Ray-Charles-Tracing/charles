@@ -11,6 +11,7 @@
 
 #include "../nlohmann/json.hpp"
 #include "../raymath/Color.hpp"
+#include "../raymath/Cube.hpp"
 #include "../raymath/Light.hpp"
 #include "../raymath/MaterialType.hpp"
 #include "../raymath/Plan.hpp"
@@ -31,8 +32,7 @@
 using json = nlohmann::json;
 
 enum class ShaderType { PHONG, FLAT, DIFFUS, PECULAR, UNKNOWN };
-enum class ShapeType { SPHERE, PLAN, TRIANGLE, UNKNOWN };
-
+enum class ShapeType { SPHERE, PLAN, TRIANGLE, CUBE, UNKNOWN };
 class Config {
  public:
   Config(const std::string& configFilePath);

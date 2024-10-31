@@ -54,10 +54,18 @@
       "material_type": "ceramic"
     },
     {
+      "type": "cube",
+      "position": [-6, 10, 40],
+      "size": 15,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "metal"
+    },
+    {
       "type": "triangle",
-      "v1": [-15, -4, 25],
-      "v2": [0, 15, 25],
-      "v3": [15, -4, 25],
+      "v1": [-5, -4, 25],
+      "v2": [10, 15, 25],
+      "v3": [25, -4, 25],
       "reflection_type": "reflective",
       "color": [0, 0, 1],
       "material_type": "metal"

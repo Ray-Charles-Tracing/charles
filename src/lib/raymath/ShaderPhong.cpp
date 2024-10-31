@@ -35,6 +35,7 @@ Color ShaderPhong::calculateShader(
   if (intersectionResultOpt.has_value()) {
     // Initialize variables
     Color shapeColor = shape.getColor();
+    std::string shapeType = shape.getType();
     Color lightColor = light.getColor();
     Vector intersectionPoint = intersectionResultOpt.value().intersectPoint;
     Vector normal = intersectionResultOpt.value().normal;
@@ -44,7 +45,8 @@ Color ShaderPhong::calculateShader(
     float roughness = shape.getRoughness();
 
     // Vérifier si le point est dans l'ombre pour cette lumière
-    if (!isPointVisibleFromLight(intersectionPoint, light, objects)) {
+    if (shapeType != "Cube" && shapeType != "Triangle" &&
+        !isPointVisibleFromLight(intersectionPoint, light, objects)) {
       return pixel;  // Le point est dans l'ombre, pas de contribution de cette
                      // lumière
     }

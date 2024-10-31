@@ -2,6 +2,10 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <vector>
+
+// Include our class definition - we can read it thanks to
+// `target_include_directories`
 #include <rayimage/Camera.hpp>
 #include <rayimage/Config.hpp>
 #include <rayimage/Image.hpp>
@@ -9,7 +13,6 @@
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
 #include <raymath/Vector.hpp>
-#include <vector>
 
 using namespace std;
 

@@ -16,7 +16,8 @@ const std::unordered_map<std::string, MaterialType> Config::materialTypeMap = {
 const std::unordered_map<std::string, ShapeType> Config::shapeTypeMap = {
     {"sphere", ShapeType::SPHERE},
     {"plan", ShapeType::PLAN},
-    {"triangle", ShapeType::TRIANGLE}};
+    {"triangle", ShapeType::TRIANGLE},
+    {"cube", ShapeType::CUBE}};
 
 Config::Config(const std::string& configFilePath)
     : configFilePath(configFilePath) {}
@@ -57,7 +58,7 @@ std::vector<Light> Config::getLights() const {
 std::vector<std::unique_ptr<Shape>> Config::getShapes() const {
   std::vector<std::unique_ptr<Shape>> shapes;
   for (const auto& shape : config["shapes"]) {
-    MaterialType materialType = MaterialType::METAL;  // Default material type
+    MaterialType materialType = MaterialType::METAL;  // Default material
     auto it = materialTypeMap.find(shape["material_type"]);
     if (it != materialTypeMap.end()) {
       materialType = it->second;
@@ -69,31 +70,31 @@ std::vector<std::unique_ptr<Shape>> Config::getShapes() const {
       shapeType = shapeIt->second;
     }
 
+    ReflectionType reflectionType = shape["reflection_type"] == "reflective"
+                                        ? ReflectionType::REFLECTIVE
+                                        : ReflectionType::MAT;
+
     switch (shapeType) {
       case ShapeType::SPHERE:
         shapes.push_back(std::make_unique<Sphere>(
-            jsonToVector(shape["position"]), shape["radius"],
-            shape["reflection_type"] == "reflective"
-                ? ReflectionType::REFLECTIVE
-                : ReflectionType::MAT,
+            jsonToVector(shape["position"]), shape["radius"], reflectionType,
             jsonToColor(shape["color"]), materialType));
         break;
       case ShapeType::PLAN:
         shapes.push_back(std::make_unique<Plan>(
             jsonToVector(shape["position"]), jsonToVector(shape["normal"]),
-            shape["reflection_type"] == "reflective"
-                ? ReflectionType::REFLECTIVE
-                : ReflectionType::MAT,
-            jsonToColor(shape["color"]), materialType));
+            reflectionType, jsonToColor(shape["color"]), materialType));
         break;
       case ShapeType::TRIANGLE:
         shapes.push_back(std::make_unique<Triangle>(
             jsonToVector(shape["v1"]), jsonToVector(shape["v2"]),
-            jsonToVector(shape["v3"]),
-            shape["reflection_type"] == "reflective"
-                ? ReflectionType::REFLECTIVE
-                : ReflectionType::MAT,
+            jsonToVector(shape["v3"]), reflectionType,
             jsonToColor(shape["color"]), materialType));
+        break;
+      case ShapeType::CUBE:
+        shapes.push_back(std::make_unique<Cube>(
+            jsonToVector(shape["position"]), shape["size"],
+            jsonToColor(shape["color"]), reflectionType, materialType));
         break;
       default:
         std::cerr << "Unknown shape type: " << shape["type"] << std::endl;
