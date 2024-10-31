@@ -1,32 +1,15 @@
 #include <chrono>
-#include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <memory>
-#include <optional>
-#include <vector>
-
-// Include our class definition - we can read it thanks to
-// `target_include_directories`
 #include <rayimage/Camera.hpp>
 #include <rayimage/Config.hpp>
 #include <rayimage/Image.hpp>
 #include <rayimage/Scene.hpp>
 #include <raymath/Color.hpp>
 #include <raymath/Light.hpp>
-#include <raymath/MaterialType.hpp>
-#include <raymath/Plan.hpp>
-#include <raymath/Ray.hpp>
-#include <raymath/ReflectionType.hpp>
-#include <raymath/Shader.hpp>
-#include <raymath/ShaderDiffus.hpp>
-#include <raymath/ShaderFlat.hpp>
-#include <raymath/ShaderPecular.hpp>
-#include <raymath/ShaderPhong.hpp>
-#include <raymath/Shape.hpp>
-#include <raymath/Sphere.hpp>
-#include <raymath/Triangle.hpp>
 #include <raymath/Vector.hpp>
+#include <vector>
 
 using namespace std;
 
