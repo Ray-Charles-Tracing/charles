@@ -72,8 +72,8 @@
     },
     {
       "type": "cube",
-      "position": [0, 2, 20],
-      "size": 5,
+      "position": [-7, 2, 10],
+      "size": 3,
       "reflection_type": "reflective",
       "color": [1, 0, 0],
       "material_type": "metal"
