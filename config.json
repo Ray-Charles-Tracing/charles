@@ -1,0 +1,55 @@
+{
+  "output_directory": "./render",
+  "image": {
+    "width": 1920,
+    "height": 1080
+  },
+  "shader": "phong",
+  "background": {
+    "color": [0, 0, 0]
+  },
+  "lights": [{ "color": [1, 1, 1], "position": [0, 45, 0] }],
+  "shapes": [
+    {
+      "type": "plan",
+      "position": [0, -10, 0],
+      "normal": [0, 1, 0],
+      "reflection_type": "mat",
+      "color": [0, 0, 1],
+      "material_type": "metal"
+    },
+    {
+      "type": "sphere",
+      "position": [-15, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "wood"
+    },
+    {
+      "type": "sphere",
+      "position": [-5, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "plastic"
+    },
+    {
+      "type": "sphere",
+      "position": [5, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "metal"
+    },
+    {
+      "type": "sphere",
+      "position": [15, 0, 20],
+      "radius": 3,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "ceramic"
+    }
+  ],
+  "max_reflections": 3
+}

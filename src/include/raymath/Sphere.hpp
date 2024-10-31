@@ -13,7 +13,7 @@
 class Sphere : public Shape {
  private:
   float radius;
-  bool isVisible(Ray ray, Vector cameraSphereDirection) const override;
+  bool isVisible(Ray ray, Vector cameraShapeDirection) const override;
   bool isIntersect(float centerToTheoricIntersectPointLength) const;
 
  public:
@@ -25,7 +25,7 @@ class Sphere : public Shape {
 
   ~Sphere() override = default;
 
-  std::optional<Vector> getIntersectPoint(Ray ray) const override;
+  std::optional<IntersectionResult> getIntersectResult(Ray ray) const override;
 
   friend std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere);
 };

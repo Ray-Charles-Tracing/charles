@@ -10,6 +10,12 @@ WORKDIR /app
 # Copier tous les fichiers source dans le conteneur
 COPY src/ src/
 
+# Copier le fichier json.hpp dans le conteneur
+COPY src/include/nlohmann/json.hpp src/include/nlohmann/
+
+# Copier le fichier config.json dans le conteneur
+COPY config.json /app/
+
 # Créer le dossier de rendu et de la bibliothèque statique
 RUN mkdir -p /app/render
 

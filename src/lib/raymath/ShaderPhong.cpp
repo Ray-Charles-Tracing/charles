@@ -13,10 +13,11 @@ bool isPointVisibleFromLight(
   Ray shadowRay(shadowOrigin, lightDir);  // Crée un rayon vers la lumière
 
   for (const auto& object : objects) {
-    std::optional<Vector> intersectPointOpt =
-        object->getIntersectPoint(shadowRay);
-    if (intersectPointOpt.has_value()) {
-      float distanceToIntersect = (shadowOrigin - *intersectPointOpt).getNorm();
+    std::optional<Shape::IntersectionResult> intersectionResultOpt =
+        object->getIntersectResult(shadowRay);
+    if (intersectionResultOpt.has_value()) {
+      Vector intersectPoint = intersectionResultOpt.value().intersectPoint;
+      float distanceToIntersect = (shadowOrigin - intersectPoint).getNorm();
       float distanceToLight = (light.getPosition() - point).getNorm();
 
       if (distanceToIntersect < distanceToLight) {
@@ -28,24 +29,30 @@ bool isPointVisibleFromLight(
 }
 
 Color ShaderPhong::calculateShader(
-    Color pixel, std::optional<Vector> intersectionPointOpt, Ray ray,
-    const Shape& shape, Light light,
+    Color pixel, std::optional<Shape::IntersectionResult> intersectionResultOpt,
+    Ray ray, const Shape& shape, Light light,
     const std::vector<std::unique_ptr<Shape>>& objects) const {
-  if (intersectionPointOpt.has_value()) {
+  if (intersectionResultOpt.has_value()) {
+    // Initialize variables
     Color shapeColor = shape.getColor();
     Color lightColor = light.getColor();
+    Vector intersectionPoint = intersectionResultOpt.value().intersectPoint;
+    Vector normal = intersectionResultOpt.value().normal;
+
+    // Coefficient de réflexion diffuse et rugosité
     float k_d = shape.getDiffuseReflexionCoef();
+    float roughness = shape.getRoughness();
 
     // Vérifier si le point est dans l'ombre pour cette lumière
-    if (!isPointVisibleFromLight(*intersectionPointOpt, light, objects)) {
+    if (!isPointVisibleFromLight(intersectionPoint, light, objects)) {
       return pixel;  // Le point est dans l'ombre, pas de contribution de cette
                      // lumière
     }
 
     // Obtenir les bases pour le calcul de l'éclairage diffus et spéculaire
-    Vector intersectionPoint, normal, lightDir, viewDir;
-    std::tie(intersectionPoint, normal, lightDir, viewDir) =
-        this->getDiffuseBases(*intersectionPointOpt, ray, shape, light);
+    Vector lightDir, viewDir;
+    std::tie(lightDir, viewDir) =
+        this->getDiffuseBases(intersectionPoint, ray, shape, light);
 
     float diffuseIntensity;
     Color specularColor;

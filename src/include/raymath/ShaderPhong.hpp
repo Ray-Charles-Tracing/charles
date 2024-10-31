@@ -15,7 +15,8 @@
 class ShaderPhong : public Shader {
  public:
   Color calculateShader(
-      Color pixel, std::optional<Vector> intersectionPoint, Ray ray,
+      Color pixel,
+      std::optional<Shape::IntersectionResult> intersectionResultOpt, Ray ray,
       const Shape& shape, Light light,
       const std::vector<std::unique_ptr<Shape>>& objects) const override;
 };
