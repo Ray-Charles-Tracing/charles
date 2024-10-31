@@ -1,3 +1,6 @@
+#pragma once
+
+#include <string>
 #include <vector>
 
 #include "Color.hpp"
@@ -22,4 +25,6 @@ class Cube : public Shape {
       Ray ray) const override;
   bool isVisible(Ray ray, Vector cameraShapeDirection) const override;
   bool isIntersect(float centerToTheoricIntersectPointLength) const;
+
+  std::string getType() const override { return "Cube"; }
 };

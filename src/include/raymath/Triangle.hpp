@@ -1,7 +1,7 @@
 #pragma once
-
 #include <iostream>
 #include <optional>
+#include <string>
 
 #include "Color.hpp"
 #include "MaterialType.hpp"
@@ -27,6 +27,8 @@ class Triangle : public Shape {
   ~Triangle() override = default;
 
   std::optional<IntersectionResult> getIntersectResult(Ray ray) const override;
+
+  std::string getType() const override { return "Triangle"; }
 
   friend std::ostream& operator<<(std::ostream& _stream,
                                   Triangle const& triangle);

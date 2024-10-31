@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <optional>
+#include <string>
 
 #include "Color.hpp"
 #include "Ray.hpp"
@@ -23,6 +24,7 @@ class Plan : public Shape {
   ~Plan() override = default;
 
   std::optional<IntersectionResult> getIntersectResult(Ray ray) const override;
+  std::string getType() const override { return "Sphere"; }
 
   friend std::ostream& operator<<(std::ostream& _stream, Plan const& plan);
 };
