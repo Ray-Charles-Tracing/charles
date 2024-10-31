@@ -68,6 +68,18 @@ std::string Plan::toObjData(int& vertexIndex) const {
   return ss.str();
 }
 
+std::string Plan::toObjData(int& vertexIndex) const {
+  std::stringstream ss;
+  ss << "# Plan\n";
+  ss << "v " << position.getX() - 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() + 10 << " " << position.getY() << " "
+     << position.getZ() << "\n";
+  ss << "v " << position.getX() << " " << position.getY() - 10 << " "
+     << position.getZ() << "\n";
+  return ss.str();
+}
+
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {
   _stream << "Shape: " << static_cast<Shape const&>(plan)
           << ", Normal: " << plan.normal;

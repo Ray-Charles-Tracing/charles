@@ -29,5 +29,7 @@ class Sphere : public Shape {
 
   std::string toObjData(int& vertexIndex) const override;
 
+  std::string toObjData(int& vertexIndex) const override;
+
   friend std::ostream& operator<<(std::ostream& _stream, Sphere const& sphere);
 };

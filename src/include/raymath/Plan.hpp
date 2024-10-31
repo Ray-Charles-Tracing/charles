@@ -26,5 +26,7 @@ class Plan : public Shape {
 
   std::string toObjData(int& vertexIndex) const override;
 
+  std::string toObjData(int& vertexIndex) const override;
+
   friend std::ostream& operator<<(std::ostream& _stream, Plan const& plan);
 };
