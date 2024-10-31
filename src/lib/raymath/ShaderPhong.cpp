@@ -7,19 +7,23 @@ bool isPointVisibleFromLight(
     const Vector& point, const Light& light,
     const std::vector<std::unique_ptr<Shape>>& objects) {
   Vector lightDir = (light.getPosition() - point).normalize();
-  Vector shadowOrigin =
-      point +
-      lightDir * 1e-4f;  // Décalage pour éviter les erreurs de précision
-  Ray shadowRay(shadowOrigin, lightDir);  // Crée un rayon vers la lumière
+  Ray shadowRay(point, lightDir);  // Crée un rayon vers la lumière
 
   for (const auto& object : objects) {
     std::optional<Shape::IntersectionResult> intersectionResultOpt =
         object->getIntersectResult(shadowRay);
     if (intersectionResultOpt.has_value()) {
+      // std::cout << "Intersection point"
+      //           << intersectionResultOpt.value().intersectPoint
+      //           << "Light position" << light.getPosition() << "Shadow Point"
+      //           << point << "Normale: " <<
+      //           intersectionResultOpt.value().normal
+      //           << "Light dir" << lightDir << std::endl;
       Vector intersectPoint = intersectionResultOpt.value().intersectPoint;
-      float distanceToIntersect = (shadowOrigin - intersectPoint).getNorm();
+      float distanceToIntersect = (intersectPoint - point).getNorm();
       float distanceToLight = (light.getPosition() - point).getNorm();
-
+      // std::cout << "Distance to intersect: " << distanceToIntersect
+      //           << "Distance to light " << distanceToLight << std::endl;
       if (distanceToIntersect < distanceToLight) {
         return false;  // Un objet bloque la lumière
       }
