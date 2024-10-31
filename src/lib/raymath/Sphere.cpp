@@ -14,7 +14,8 @@ Sphere::Sphere(Vector position, float scale, float radius,
     : Shape(position, scale, color, reflectionType, materialType),
       radius(radius) {}
 
-std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
+std::optional<Shape::IntersectionResult> Sphere::getIntersectResult(
+    Ray ray) const {
   Vector cameraSphereDirection = getPosition() - ray.getOrigin();
   if (!isVisible(ray, cameraSphereDirection)) {
     return std::nullopt;
@@ -42,11 +43,16 @@ std::optional<Vector> Sphere::getIntersectPoint(Ray ray) const {
   Vector theoricIntersectPointToRealIntersectPointDirection =
       ray.getDirection() *
       (-1 * theoricIntersectPointToRealIntersectPointLength);
+
+  // Return the intersection point and the normal vector at the intersection
   Vector realIntersectPoint =
       theoricIntersectPoint +
       theoricIntersectPointToRealIntersectPointDirection;
+  Vector centerToRealIntersectionPoint = realIntersectPoint - getPosition();
+  Vector normalOnIntersectionPoint = centerToRealIntersectionPoint.normalize();
 
-  return realIntersectPoint;
+  return IntersectionResult{realIntersectPoint,
+                            normalOnIntersectionPoint.normalize()};
 }
 
 bool Sphere::isVisible(Ray ray, Vector cameraSphereDirection) const {

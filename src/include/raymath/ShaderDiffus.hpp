@@ -12,7 +12,8 @@
 
 class ShaderDiffus : public Shader {
  public:
-  Color calculateShader(Color pixel, std::optional<Vector> intersectionPoint,
-                        Ray ray, const Shape& shape,
-                        Light light) const override;
+  Color calculateShader(
+      Color pixel,
+      std::optional<Shape::IntersectionResult> intersectionResultOpt, Ray ray,
+      const Shape& shape, Light light) const override;
 };

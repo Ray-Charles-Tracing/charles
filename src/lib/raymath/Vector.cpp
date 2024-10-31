@@ -24,6 +24,19 @@ Vector Vector::operator+(Vector const &vect) const {
   return v;
 }
 
+Vector Vector::cross(Vector const &vect) const {
+  Vector v;
+  v.x = y * vect.z - z * vect.y;
+  v.y = z * vect.x - x * vect.z;
+  v.z = x * vect.y - y * vect.x;
+  return v;
+}
+
+// Operator overload for scalar division
+Vector Vector::operator/(float const &scalar) const {
+  return Vector(x / scalar, y / scalar, z / scalar);
+}
+
 Vector Vector::operator*(float const &direction) const {
   Vector result;
   result.x = x * direction;

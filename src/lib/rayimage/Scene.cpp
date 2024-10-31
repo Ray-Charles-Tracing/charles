@@ -73,39 +73,57 @@ Color Scene::traceRay(const Ray& ray, int depth) {
   }
 
   float closestDistance = std::numeric_limits<float>::max();
-  std::optional<Vector> closestIntersectPoint;
+  std::optional<Shape::IntersectionResult> closestIntersectionResultOpt;
   Shape* closestShape = nullptr;
 
   for (auto& shape : shapes) {
     // `std::optional` is used to represent optional values that may or may
     // not be present. It is used here to handle the case where there is no
     // intersection point.
-    std::optional<Vector> intersectPointOpt = shape->getIntersectPoint(ray);
-    float distance = intersectPointOpt.has_value()
-                         ? (ray.getOrigin() - *intersectPointOpt).getNorm()
-                         : std::numeric_limits<float>::max();
+    std::optional<Shape::IntersectionResult> intersectionResultOpt =
+        shape->getIntersectResult(ray);
 
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestIntersectPoint = intersectPointOpt;
-      closestShape = shape.get();  // Get the raw pointer from the unique_ptr
+    if (intersectionResultOpt.has_value()) {
+      Vector intersectionPoint = intersectionResultOpt.value().intersectPoint;
+      Vector normal = intersectionResultOpt.value().normal;
+      float distance =
+          (ray.getOrigin() - intersectionResultOpt.value().intersectPoint)
+              .getNorm();
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIntersectionResultOpt = {intersectionPoint, normal};
+        closestShape = shape.get();  // Get the raw pointer from the unique_ptr
+      }
     }
+    // Vector interceptionPoint = intersectResultOpt.value().intersectPoint;
+    // float distance =
+    //     intersectResultOpt.value().intersectPoint
+    //         ? (ray.getOrigin() - intersectResultOpt.value().intersectPoint)
+    //               .getNorm()
+    //         : std::numeric_limits<float>::max();
+
+    // if (distance < closestDistance) {
+    //   closestDistance = distance;
+    //   closestIntersectPoint = intersectResultOpt;
+    //   closestShape = shape.get();  // Get the raw pointer from the unique_ptr
+    // }
   }
 
-  if (closestShape && closestIntersectPoint.has_value()) {
+  if (closestShape && closestIntersectionResultOpt.has_value()) {
     Color pixelColor = background;
     std::shared_ptr<Shader> shader =
         camera.GetShader();  // Ensure shader is accessible
     for (const auto& light : lights) {
-      pixelColor += shader->calculateShader(pixelColor, closestIntersectPoint,
-                                            ray, *closestShape, light);
+      pixelColor += shader->calculateShader(
+          pixelColor, closestIntersectionResultOpt, ray, *closestShape, light);
     }
 
     // Handle reflection
     if (closestShape->getReflectionType() == ReflectionType::REFLECTIVE) {
-      Vector intersectionPoint = *closestIntersectPoint;
-      Vector normal =
-          (intersectionPoint - closestShape->getPosition()).normalize();
+      Vector intersectionPoint =
+          closestIntersectionResultOpt.value().intersectPoint;
+      Vector normal = closestIntersectionResultOpt.value().normal;
       Vector reflectionDirection =
           ray.getDirection() -
           normal * 2 * ray.getDirection().computeScalable(normal);

@@ -12,18 +12,15 @@
 
 class Shader {
  protected:
-  std::tuple<Vector, Vector, Vector, Vector> getDiffuseBases(
-      Vector intersectionPoint, Ray ray, const Shape& shape,
-      Light light) const {
-    Vector shapePos = shape.getPosition();
-    Vector cp = intersectionPoint - shapePos;
-    Vector normal = cp.normalize();  // TODO : A calculer dans shape
+  std::tuple<Vector, Vector> getDiffuseBases(Vector intersectionPoint, Ray ray,
+                                             const Shape& shape,
+                                             Light light) const {
     Vector lightDir = (light.getPosition() - intersectionPoint)
                           .normalize();  // TODO : A calculer dans light
     Vector viewDir = (ray.getOrigin() - intersectionPoint)
                          .normalize();  // TODO : A calculer dans Ray
 
-    return std::make_tuple(intersectionPoint, normal, lightDir, viewDir);
+    return std::make_tuple(lightDir, viewDir);
   }
 
   std::tuple<float, Color> getSpeculareBases(Vector lightDir, Vector normal,
@@ -56,9 +53,9 @@ class Shader {
   }
 
  public:
-  virtual Color calculateShader(Color pixel,
-                                std::optional<Vector> intersectionPoint,
-                                Ray ray, const Shape& shape,
-                                Light light) const = 0;
+  virtual Color calculateShader(
+      Color pixel,
+      std::optional<Shape::IntersectionResult> intersectionResultOpt, Ray ray,
+      const Shape& shape, Light light) const = 0;
   virtual ~Shader() = default;
 };

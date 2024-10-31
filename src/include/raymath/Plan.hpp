@@ -22,7 +22,7 @@ class Plan : public Shape {
        ReflectionType reflectionType, Color color, MaterialType materialType);
   ~Plan() override = default;
 
-  std::optional<Vector> getIntersectPoint(Ray ray) const override;
+  std::optional<IntersectionResult> getIntersectResult(Ray ray) const override;
 
   friend std::ostream& operator<<(std::ostream& _stream, Plan const& plan);
 };

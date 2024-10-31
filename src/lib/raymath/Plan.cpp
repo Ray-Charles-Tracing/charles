@@ -24,7 +24,8 @@ bool Plan::isIntersect(float centerToTheoricIntersectPointLength) const {
   return true;
 }
 
-std::optional<Vector> Plan::getIntersectPoint(Ray ray) const {
+std::optional<Shape::IntersectionResult> Plan::getIntersectResult(
+    Ray ray) const {
   // Vérifier si le plan est parralele au rayon ou derrière la caméra
   float dotProductBetweenRayAndNormal =
       ray.getDirection().computeScalable(normal);
@@ -51,7 +52,7 @@ std::optional<Vector> Plan::getIntersectPoint(Ray ray) const {
   Vector realIntersectPoint = ray.getOrigin() + cameraToTheoryIntersectPoint;
 
   // Retourner le point d'intersection réel
-  return realIntersectPoint;
+  return IntersectionResult{realIntersectPoint, normal};
 }
 
 std::ostream& operator<<(std::ostream& _stream, Plan const& plan) {
