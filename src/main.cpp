@@ -9,6 +9,7 @@
 // Include our class definition - we can read it thanks to
 // `target_include_directories`
 #include <rayimage/Camera.hpp>
+#include <rayimage/Config.hpp>
 #include <rayimage/Image.hpp>
 #include <rayimage/Scene.hpp>
 #include <raymath/Color.hpp>
@@ -30,22 +31,23 @@
 using namespace std;
 
 int main() {
-  // Ensure the output directory exists
-  std::filesystem::create_directories("./render");
+  // Load the configuration
+  Config config("config.json");
+  if (!config.loadConfig()) {
+    return 1;
+  }
 
-  // Initialize colors
-  Color red(1, 0, 0);
-  Color green(0, 1, 0);
-  Color blue(0, 0, 1);
-  Color black;
+  // Ensure the output directory exists
+  std::string output_directory = config.getOutputDirectory();
+  std::filesystem::create_directories(output_directory);
 
   // Create an image in memory
-  int width = 1920;
-  int height = 1080;
+  int width = config.getImageWidth();
+  int height = config.getImageHeight();
   Image image(width, height);
 
   // Create light sources
-  // vector<Light> lights = {Light(Color(1, 1, 1), Vector(0, 0, 0))};
+  //   vector<Light> lights = config.getLights();
   vector<Light> lights = {//   Light(Color(0, 1, 1), Vector(128, 128, 128)),
                           //   Light(Color(1, 1, 0), Vector(-128, -128, 128)),
                           //   Light(Color(1, 0, 1), Vector(-128, 128, 128)),
@@ -54,6 +56,7 @@ int main() {
                           Light(Color(1, 1, 1), Vector(10, 10, 0))};
 
   // List of shapes
+  //   std::vector<std::unique_ptr<Shape>> shapes = config.getShapes();
   std::vector<std::unique_ptr<Shape>> shapes;
   shapes.push_back(std::make_unique<Plan>(
       Vector(0, -5, 0), Vector(0, 1, 0), ReflectionType::REFLECTIVE,
@@ -75,29 +78,27 @@ int main() {
       ReflectionType::REFLECTIVE, Color(0, 0, 1), MaterialType::METAL));
 
   // Create a shared pointer to the shader
-  std::shared_ptr<Shader> shader = std::make_shared<ShaderPhong>();
+  std::shared_ptr<Shader> shader = config.getShader();
 
   // Initialize the camera
   Camera camera(Vector(0, 0, 0), 1.0, image, shader);
 
   // Initialize the scene
-  Scene scene(Vector(0, 0, 0), camera, std::move(lights), black,
+  Color background = config.getBackgroundColor();
+  Scene scene(Vector(0, 0, 0), camera, std::move(lights), background,
               std::move(shapes));
 
   // Start the timer for rendering
   auto start = std::chrono::high_resolution_clock::now();
 
   // Execute raycasting and render the image
-  Image renderImage = scene.rayCast(3);  // Set max reflections to 3
+  Image renderImage =
+      scene.rayCast(config.getMaxReflections());  // Set max reflections
   camera.Render(renderImage);
 
-  // Stop the timer for rendering
+  // End the timer for rendering & print the duration
   auto end = std::chrono::high_resolution_clock::now();
-
-  // Calculate the duration
   std::chrono::duration<double> duration = end - start;
-
-  // Print the duration
   std::cout << "Rendering time: " << duration.count() << " seconds"
             << std::endl;
 
