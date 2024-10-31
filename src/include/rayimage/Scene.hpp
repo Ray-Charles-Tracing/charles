@@ -40,7 +40,5 @@ class Scene {
 
   Color traceRay(const Ray& ray, int depth);
 
-  bool isPointInShadow(const Vector& point, const Light& light) const;
-
   friend std::ostream& operator<<(std::ostream& _stream, Scene const& scene);
 };

@@ -2,9 +2,36 @@
 
 #include <cmath>
 
+// Fonction pour vérifier si un point est visible depuis la lumière
+bool isPointVisibleFromLight(
+    const Vector& point, const Light& light,
+    const std::vector<std::unique_ptr<Shape>>& objects) {
+  Vector lightDir = (light.getPosition() - point).normalize();
+  Vector shadowOrigin =
+      point +
+      lightDir * 1e-4f;  // Décalage pour éviter les erreurs de précision
+  Ray shadowRay(shadowOrigin, lightDir);  // Crée un rayon vers la lumière
+
+  for (const auto& object : objects) {
+    std::optional<Shape::IntersectionResult> intersectionResultOpt =
+        object->getIntersectResult(shadowRay);
+    if (intersectionResultOpt.has_value()) {
+      Vector intersectPoint = intersectionResultOpt.value().intersectPoint;
+      float distanceToIntersect = (shadowOrigin - intersectPoint).getNorm();
+      float distanceToLight = (light.getPosition() - point).getNorm();
+
+      if (distanceToIntersect < distanceToLight) {
+        return false;  // Un objet bloque la lumière
+      }
+    }
+  }
+  return true;  // Pas d'obstacle, la lumière atteint le point
+}
+
 Color ShaderPhong::calculateShader(
     Color pixel, std::optional<Shape::IntersectionResult> intersectionResultOpt,
-    Ray ray, const Shape& shape, Light light) const {
+    Ray ray, const Shape& shape, Light light,
+    const std::vector<std::unique_ptr<Shape>>& objects) const {
   if (intersectionResultOpt.has_value()) {
     // Initialize variables
     Color shapeColor = shape.getColor();
@@ -16,31 +43,39 @@ Color ShaderPhong::calculateShader(
     float k_d = shape.getDiffuseReflexionCoef();
     float roughness = shape.getRoughness();
 
-    // Get bases diffuse values
+    // Vérifier si le point est dans l'ombre pour cette lumière
+    if (!isPointVisibleFromLight(intersectionPoint, light, objects)) {
+      return pixel;  // Le point est dans l'ombre, pas de contribution de cette
+                     // lumière
+    }
+
+    // Obtenir les bases pour le calcul de l'éclairage diffus et spéculaire
     Vector lightDir, viewDir;
     std::tie(lightDir, viewDir) =
         this->getDiffuseBases(intersectionPoint, ray, shape, light);
 
-    // Get bases diffuse values
     float diffuseIntensity;
     Color specularColor;
     std::tie(diffuseIntensity, specularColor) = this->getSpeculareBases(
         lightDir, normal, shape, viewDir, lightColor, light);
 
     // Ajuster l'intensité spéculaire en fonction de la rugosité
-    float adjustedSpecularIntensity =
-        specularColor.R();  // Utilisation du getter
-    for (int i = 0; i < static_cast<int>(roughness * 10); ++i) {
-      adjustedSpecularIntensity *= specularColor.R();  // Utilisation du getter
+    float adjustedSpecularIntensity = specularColor.R();
+    for (int i = 0; i < static_cast<int>(shape.getRoughness() * 10); ++i) {
+      adjustedSpecularIntensity *= specularColor.R();
     }
     specularColor = Color(1.0f, 1.0f, 1.0f) * shape.getSpecularReflexionCoef() *
                     adjustedSpecularIntensity;
 
-    // Calculate diffuse color
+    // Calcul de la couleur diffuse
     Color diffuseColor = shapeColor * k_d * diffuseIntensity * lightColor;
 
-    // Final color
+    // Couleur finale
     Color newPixel = pixel + diffuseColor + specularColor;
+
+    // Normaliser la couleur finale pour éviter des valeurs supérieures à 1
+    newPixel = Color(std::min(newPixel.R(), 1.0f), std::min(newPixel.G(), 1.0f),
+                     std::min(newPixel.B(), 1.0f));
 
     return newPixel;
   }

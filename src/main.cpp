@@ -64,9 +64,9 @@ int main() {
   shapes.push_back(std::make_unique<Sphere>(
       Vector(-15, 0, 20), 3, ReflectionType::REFLECTIVE, Color(0, 1, 1),
       MaterialType::WOOD));
-  shapes.push_back(
-      std::make_unique<Sphere>(Vector(-5, 0, 20), 3, ReflectionType::REFLECTIVE,
-                               Color(0, 1, 1), MaterialType::PLASTIC));
+  shapes.push_back(std::make_unique<Sphere>(Vector(-5, 0, 20), 3,
+                                            ReflectionType::MAT, Color(0, 1, 1),
+                                            MaterialType::PLASTIC));
   shapes.push_back(
       std::make_unique<Sphere>(Vector(5, 0, 20), 3, ReflectionType::REFLECTIVE,
                                Color(0, 1, 1), MaterialType::METAL));
