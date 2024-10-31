@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <optional>
+#include <string>
 
 #include "Material.hpp"
 #include "MaterialType.hpp"  // Include the MaterialType header
@@ -43,6 +44,8 @@ class Shape : public Material {
   float getScale() const { return scale; }
   virtual std::optional<IntersectionResult> getIntersectResult(
       Ray ray) const = 0;
+
+  virtual std::string getType() const = 0;
 
   friend std::ostream& operator<<(std::ostream& _stream, Shape const& shape) {
     _stream << "(Position: " << shape.position << ", Scale: " << shape.scale

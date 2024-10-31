@@ -8,14 +8,17 @@
   "background": {
     "color": [0, 0, 0]
   },
-  "lights": [{ "color": [1, 1, 1], "position": [0, 45, 0] }],
+  "lights": [
+    { "color": [1, 1, 1], "position": [-10, 10, 0] },
+    { "color": [1, 1, 1], "position": [10, 10, 0] }
+  ],
   "shapes": [
     {
       "type": "plan",
-      "position": [0, -10, 0],
+      "position": [0, -5, 0],
       "normal": [0, 1, 0],
-      "reflection_type": "mat",
-      "color": [0, 0, 1],
+      "reflection_type": "reflective",
+      "color": [0.7, 0.7, 0.7],
       "material_type": "metal"
     },
     {
@@ -30,7 +33,7 @@
       "type": "sphere",
       "position": [-5, 0, 20],
       "radius": 3,
-      "reflection_type": "reflective",
+      "reflection_type": "mat",
       "color": [0, 1, 1],
       "material_type": "plastic"
     },
@@ -49,6 +52,31 @@
       "reflection_type": "reflective",
       "color": [0, 1, 1],
       "material_type": "ceramic"
+    },
+    {
+      "type": "cube",
+      "position": [-6, 10, 40],
+      "size": 15,
+      "reflection_type": "reflective",
+      "color": [0, 1, 1],
+      "material_type": "metal"
+    },
+    {
+      "type": "triangle",
+      "v1": [-5, -4, 25],
+      "v2": [10, 15, 25],
+      "v3": [25, -4, 25],
+      "reflection_type": "reflective",
+      "color": [0, 0, 1],
+      "material_type": "metal"
+    },
+    {
+      "type": "cube",
+      "position": [0, 2, 20],
+      "size": 5,
+      "reflection_type": "reflective",
+      "color": [1, 0, 0],
+      "material_type": "metal"
     }
   ],
   "max_reflections": 3

@@ -39,6 +39,7 @@ Color ShaderPhong::calculateShader(
   if (intersectionResultOpt.has_value()) {
     // Initialize variables
     Color shapeColor = shape.getColor();
+    std::string shapeType = shape.getType();
     Color lightColor = light.getColor();
     Vector intersectionPoint = intersectionResultOpt.value().intersectPoint;
     Vector normal = intersectionResultOpt.value().normal;

@@ -11,6 +11,7 @@
 
 #include "../nlohmann/json.hpp"
 #include "../raymath/Color.hpp"
+#include "../raymath/Cube.hpp"
 #include "../raymath/Light.hpp"
 #include "../raymath/MaterialType.hpp"
 #include "../raymath/Plan.hpp"
@@ -22,6 +23,7 @@
 #include "../raymath/ShaderPhong.hpp"
 #include "../raymath/Shape.hpp"
 #include "../raymath/Sphere.hpp"
+#include "../raymath/Triangle.hpp"
 #include "../raymath/Vector.hpp"
 #include "Camera.hpp"
 #include "Image.hpp"
@@ -30,8 +32,7 @@
 using json = nlohmann::json;
 
 enum class ShaderType { PHONG, FLAT, DIFFUS, PECULAR, UNKNOWN };
-enum class ShapeType { SPHERE, PLAN, UNKNOWN };
-
+enum class ShapeType { SPHERE, PLAN, TRIANGLE, CUBE, UNKNOWN };
 class Config {
  public:
   Config(const std::string& configFilePath);
@@ -51,4 +52,7 @@ class Config {
   static const std::unordered_map<std::string, ShaderType> shaderTypeMap;
   static const std::unordered_map<std::string, MaterialType> materialTypeMap;
   static const std::unordered_map<std::string, ShapeType> shapeTypeMap;
+
+  Vector jsonToVector(const json& j) const;
+  Color jsonToColor(const json& j) const;
 };

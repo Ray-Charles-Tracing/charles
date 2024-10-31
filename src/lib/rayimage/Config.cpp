@@ -14,7 +14,10 @@ const std::unordered_map<std::string, MaterialType> Config::materialTypeMap = {
     {"ceramic", MaterialType::CERAMIC}};
 
 const std::unordered_map<std::string, ShapeType> Config::shapeTypeMap = {
-    {"sphere", ShapeType::SPHERE}, {"plan", ShapeType::PLAN}};
+    {"sphere", ShapeType::SPHERE},
+    {"plan", ShapeType::PLAN},
+    {"triangle", ShapeType::TRIANGLE},
+    {"cube", ShapeType::CUBE}};
 
 Config::Config(const std::string& configFilePath)
     : configFilePath(configFilePath) {}
@@ -40,18 +43,14 @@ int Config::getImageHeight() const { return config["image"]["height"]; }
 int Config::getMaxReflections() const { return config["max_reflections"]; }
 
 Color Config::getBackgroundColor() const {
-  return Color(config["background"]["color"][0],
-               config["background"]["color"][1],
-               config["background"]["color"][2]);
+  return jsonToColor(config["background"]["color"]);
 }
 
 std::vector<Light> Config::getLights() const {
   std::vector<Light> lights;
   for (const auto& light : config["lights"]) {
-    lights.emplace_back(
-        Color(light["color"][0], light["color"][1], light["color"][2]),
-        Vector(light["position"][0], light["position"][1],
-               light["position"][2]));
+    lights.emplace_back(jsonToColor(light["color"]),
+                        jsonToVector(light["position"]));
   }
   return lights;
 }
@@ -59,7 +58,7 @@ std::vector<Light> Config::getLights() const {
 std::vector<std::unique_ptr<Shape>> Config::getShapes() const {
   std::vector<std::unique_ptr<Shape>> shapes;
   for (const auto& shape : config["shapes"]) {
-    MaterialType materialType = MaterialType::METAL;  // Default material type
+    MaterialType materialType = MaterialType::METAL;  // Default material
     auto it = materialTypeMap.find(shape["material_type"]);
     if (it != materialTypeMap.end()) {
       materialType = it->second;
@@ -71,28 +70,31 @@ std::vector<std::unique_ptr<Shape>> Config::getShapes() const {
       shapeType = shapeIt->second;
     }
 
+    ReflectionType reflectionType = shape["reflection_type"] == "reflective"
+                                        ? ReflectionType::REFLECTIVE
+                                        : ReflectionType::MAT;
+
     switch (shapeType) {
       case ShapeType::SPHERE:
         shapes.push_back(std::make_unique<Sphere>(
-            Vector(shape["position"][0], shape["position"][1],
-                   shape["position"][2]),
-            shape["radius"],
-            shape["reflection_type"] == "reflective"
-                ? ReflectionType::REFLECTIVE
-                : ReflectionType::MAT,
-            Color(shape["color"][0], shape["color"][1], shape["color"][2]),
-            materialType));
+            jsonToVector(shape["position"]), shape["radius"], reflectionType,
+            jsonToColor(shape["color"]), materialType));
         break;
       case ShapeType::PLAN:
         shapes.push_back(std::make_unique<Plan>(
-            Vector(shape["position"][0], shape["position"][1],
-                   shape["position"][2]),
-            Vector(shape["normal"][0], shape["normal"][1], shape["normal"][2]),
-            shape["reflection_type"] == "reflective"
-                ? ReflectionType::REFLECTIVE
-                : ReflectionType::MAT,
-            Color(shape["color"][0], shape["color"][1], shape["color"][2]),
-            materialType));
+            jsonToVector(shape["position"]), jsonToVector(shape["normal"]),
+            reflectionType, jsonToColor(shape["color"]), materialType));
+        break;
+      case ShapeType::TRIANGLE:
+        shapes.push_back(std::make_unique<Triangle>(
+            jsonToVector(shape["v1"]), jsonToVector(shape["v2"]),
+            jsonToVector(shape["v3"]), reflectionType,
+            jsonToColor(shape["color"]), materialType));
+        break;
+      case ShapeType::CUBE:
+        shapes.push_back(std::make_unique<Cube>(
+            jsonToVector(shape["position"]), shape["size"],
+            jsonToColor(shape["color"]), reflectionType, materialType));
         break;
       default:
         std::cerr << "Unknown shape type: " << shape["type"] << std::endl;
@@ -124,4 +126,12 @@ std::shared_ptr<Shader> Config::getShader() const {
       std::cerr << "Unknown shader type: " << shaderTypeStr << std::endl;
       return nullptr;
   }
+}
+
+Vector Config::jsonToVector(const json& j) const {
+  return Vector(j[0], j[1], j[2]);
+}
+
+Color Config::jsonToColor(const json& j) const {
+  return Color(j[0], j[1], j[2]);
 }
