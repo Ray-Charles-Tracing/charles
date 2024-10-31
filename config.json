@@ -69,6 +69,14 @@
       "reflection_type": "reflective",
       "color": [0, 0, 1],
       "material_type": "metal"
+    },
+    {
+      "type": "cube",
+      "position": [0, 2, 20],
+      "size": 5,
+      "reflection_type": "reflective",
+      "color": [1, 0, 0],
+      "material_type": "metal"
     }
   ],
   "max_reflections": 3

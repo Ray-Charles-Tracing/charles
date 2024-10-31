@@ -20,68 +20,44 @@ Triangle::Triangle(Vector a, Vector b, Vector c, float scale,
 
 std::optional<Shape::IntersectionResult> Triangle::getIntersectResult(
     Ray ray) const {
+  const double EPSILON = 1e-4;
   Vector edge1 = b - a;
   Vector edge2 = c - a;
-  Vector normal = edge1.cross(edge2).normalize();
+  Vector h = ray.getDirection().cross(edge2);
+  double scalableProduct = edge1.computeScalable(h);
 
-  // Vérifier si le plan est parralele au rayon ou derrière la caméra
-  float dotProductBetweenRayAndNormal =
-      ray.getDirection().computeScalable(normal);
+  if (scalableProduct > -EPSILON && scalableProduct < EPSILON) {
+    return std::nullopt;  // Le rayon est parallèle au triangle
+  }
 
-  if (dotProductBetweenRayAndNormal >= 0) {
+  double f = 1.0 / scalableProduct;
+  Vector s = ray.getOrigin() - a;
+  double u = f * s.computeScalable(h);
+
+  if (u < 0.0 || u > 1.0) {
     return std::nullopt;
   }
 
-  // Calculer le déplacement entre l'origine de la caméra et l'origine du plan
-  Vector cameraPlanDirection = getPosition() - ray.getOrigin();
+  Vector q = s.cross(edge1);
+  double v = f * ray.getDirection().computeScalable(q);
 
-  // Calculer le produit scalaire entre le Vecteur Oc et la normale du plan
-  float dotProductBetweenCameraPlanDirectionAndRay =
-      cameraPlanDirection.computeScalable(normal);
-
-  // Calculer le multiplicateur du rayon normalisé pour atteindre le point
-  // d'intersection Vector t
-  float tCoeff = dotProductBetweenCameraPlanDirectionAndRay /
-                 dotProductBetweenRayAndNormal;
-
-  // Calculer le point d'intersection réel
-  Vector cameraToTheoryIntersectPoint = ray.getDirection() * tCoeff;
-
-  Vector realIntersectPoint = ray.getOrigin() + cameraToTheoryIntersectPoint;
-
-  // // L'équation de la droite : P(t) = A + t(B - A)
-  // Vector d = ray.getDirection();
-
-  // double dDotN = d.computeScalable(normal);
-  // if (fabs(dDotN) < 1e-6) {  // Vérifie si la droite est parallèle au plan
-  //   return std::nullopt;
-  //   ;  // Pas d'intersection
-  // }
-
-  // // Calcul du paramètre t
-  // float t = (normal.computeScalable(a - ray.getOrigin())) / dDotN;
-  // if (t < 0) {
-  //   return std::nullopt;
-  //   ;  // L'intersection est derrière le point A
-  // }
-
-  // // Calcul du point d'intersection
-  // Vector intersection = {ray.getOrigin().getX() + t * d.getX(),
-  //                        ray.getOrigin().getY() + t * d.getY(),
-  //                        ray.getOrigin().getZ() + t * d.getZ()};
-
-  // Vérifie si le point d'intersection est à l'intérieur du triangle
-
-  if (!isIntersect(realIntersectPoint, a, b, c)) {
+  if (v < 0.0 || u + v > 1.0) {
     return std::nullopt;
-  };
+  }
 
-  // Retourner le point d'intersection réel
-  return IntersectionResult{realIntersectPoint, normal};
+  double t = f * edge2.computeScalable(q);
+
+  if (t > EPSILON) {  // Intersection avec le triangle
+    Vector intersectPoint = ray.getOrigin() + ray.getDirection() * t;
+    Vector normal = edge1.cross(edge2).normalize();
+    return IntersectionResult{intersectPoint, normal};
+  } else {
+    return std::nullopt;  // Il y a une ligne d'intersection mais pas un rayon
+  }
 }
 
 // ! A implémenter dans la méthode getIntersectResult
-bool Triangle::isVisible(Ray ray, Vector cameraTriangleDirection) const {
+bool Triangle::isVisible(Ray ray, Vector cameraShapeDirection) const {
   // Basic visibility check, e.g., could return true if the triangle's normal
   // faces the camera or based on other visibility logic
   return true;
